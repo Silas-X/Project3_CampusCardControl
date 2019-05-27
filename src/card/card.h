@@ -20,10 +20,8 @@ namespace card {
 typedef int MoneyType;
 
 class Card {
- private:
+ protected:
   std::string userName;
-  std::string passwd;
-  //  Time issueTime;
 
  public:
   // constructor & destructor
@@ -32,17 +30,57 @@ class Card {
 
   // accessors
   std::string GetName() const;
-  std::string GetPasswd() const;
-  virtual bool Deposit(MoneyType amount);
-  virtual bool Withdraw(MoneyType amount);
-  virtual bool Pay(MoneyType amount);
-  virtual std::string LookUp();
+
+  virtual std::string LookUp() = 0;
 
   // mutators
+  virtual bool Deposit(MoneyType amount) = 0;
+  virtual bool Withdraw(MoneyType amount) = 0;
+
+  virtual bool Pay(MoneyType amount) = 0;
+
   std::string SetName() const;
-  std::string SetPasswd() const;
 };
 
+class Campus_Card : virtual public Card {
+ private:
+  std::string studentId;
+  std::string department;
+  std::string passwd;
+
+ public:
+  // contructor & destructor;
+  Campus_Card(std::string _userName, std::string _passwd);
+  ~Campus_Card();
+
+  // accessor
+  std::string GetStudentId() const;
+  std::string GetDepartment() const;
+  std::string GetPasswd() const;
+
+  // mutators
+  bool SetStudentId(std::string id);
+  bool SetDepartment(std::string department);
+  std::string SetPasswd() const;
+
+  bool Deposit(MoneyType amount);
+  bool Withdraw(MoneyType amount);
+
+  bool Pay(MoneyType amount);
+  std::string LookUp();
+};
+
+class Deposit_Card : virtual public Card {
+ private:
+  MoneyType overDraft;  // The limit amount of making an overdraft;
+  std::string passwd;
+
+ public:
+  // contructor & destructor;
+  Deposit_Card(std::string _name, std::string _passwd);
+  ~Deposit_Card();
+
+};
 }  // namespace card
 
 #endif
