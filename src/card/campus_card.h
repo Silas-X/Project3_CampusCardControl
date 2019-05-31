@@ -18,9 +18,7 @@ class Campus_Card : public Card {
   // accessor
   std::string GetStudentId() const;
   std::string GetDepartment() const;
-  std::string GetPasswd() const;
-  MoneyType GetBalance() const;
-  
+
   std::string GetInfo() const;
   // mutator
   void SetStudentId(std::string id);

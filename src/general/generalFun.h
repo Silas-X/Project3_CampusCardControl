@@ -17,7 +17,6 @@ template <class T>
 bool str2num(std::string str, T &num) {
   std::stringstream ss;
   ss.clear();
-  ss.str = "";
   ss << str;
   ss >> num;
   return !ss.fail();
@@ -28,7 +27,6 @@ bool num2str(T num, std::string &str) {
   // TODO:exceptions num is not a nums;
   std::stringstream ss;
   ss.clear();
-  ss.str = "";
   ss << num;
   ss >> str;
   return !ss.fail();
@@ -36,6 +34,7 @@ bool num2str(T num, std::string &str) {
 
 template <class T>
 T str2num(std::string str) {
+  T num;
   std::stringstream ss;
   ss.clear();
   ss.str = "";
@@ -47,9 +46,9 @@ T str2num(std::string str) {
 template <class T>
 std::string num2str(T num) {
   // TODO:exceptions num is not a nums;
+  std::string str;
   std::stringstream ss;
   ss.clear();
-  ss.str = "";
   ss << num;
   ss >> str;
   return str;

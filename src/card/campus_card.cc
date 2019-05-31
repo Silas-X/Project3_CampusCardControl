@@ -16,11 +16,9 @@ Campus_Card::~Campus_Card() {
 // accessor
 std::string Campus_Card::GetStudentId() const { return studentId; }
 std::string Campus_Card::GetDepartment() const { return department; }
-std::string Campus_Card::GetPasswd() const { return passwd; }
-MoneyType Campus_Card::GetBalance() const { return balance; }
 std::string Campus_Card::GetInfo() const {
   std::string InfoStr = "";
-  InfoStr += "Card Type: Campus_card";
+  InfoStr += "Card Type: Campus Card";
   InfoStr += "\nHolder's Information:";
   InfoStr += "\n\tName:\t" + GetName();
   InfoStr += "\n\tStudent ID:\t" + GetStudentId();

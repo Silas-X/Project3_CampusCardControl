@@ -16,14 +16,14 @@
 #include <regex>
 #include <sstream>
 #include <string>
-#include "general\generalFun.h"
+#include "..\general\generalFun.h"
 
 namespace card {
 using general::num2str;
 using general::str2num;
 
 typedef int MoneyType;
-
+enum ErrorType { INVALID_AMOUNT };
 struct Date {
   int year;
   int month;
@@ -50,77 +50,35 @@ struct Date {
 
 class Card {
  protected:
+  int identifier;
   std::string userName;
   std::string passwd;
   MoneyType balance;
   Date issueDate;
-
+  // TODO::增加卡片状态(激活，冻结，注销)
  public:
   // constructor & destructor
-  Card(std::string _userName, std::string _passwd);
+  Card(int _identifier, std::string _userName, std::string _passwd,
+       MoneyType _balance = 0);
   ~Card();
 
   // accessors
+  int GetIdentifier() const;
   std::string GetName() const;
-
-  virtual std::string LookUp() = 0;
+  std::string GetPassword() const;
+  MoneyType GetBalance() const;
+  Date GetIssueDate() const;
+  virtual std::string GetInfo() const = 0;
 
   // mutator
+  void SetName(std::string _name);
+  void SetPasswd(std::string _passwd);
+
   virtual bool Deposit(MoneyType amount) = 0;
   virtual bool Withdraw(MoneyType amount) = 0;
-
   virtual bool Pay(MoneyType amount) = 0;
-
-  bool SetName(std::string _name);
-  bool SetPasswd(std::string _passwd);
 };
 
-class Campus_Card : public Card {
- private:
-  std::string studentId;
-  std::string department;
-
- public:
-  // contructor & destructor;
-  Campus_Card(std::string _userName, std::string _passwd);
-  ~Campus_Card();
-
-  // accessor
-  std::string GetStudentId() const;
-  std::string GetDepartment() const;
-  std::string GetPasswd() const;
-
-  // mutator
-  bool SetStudentId(std::string id);
-  bool SetDepartment(std::string department);
-
-  bool Deposit(MoneyType amount);
-  bool Withdraw(MoneyType amount);
-
-  bool Pay(MoneyType amount);
-  std::string LookUp();
-};
-
-class Deposit_Card : public Card {
- private:
-  MoneyType overDraft;  // The limit amount of making an overdraft;
-
- public:
-  // contructor & destructor;
-  Deposit_Card(std::string _name, std::string _passwd);
-  ~Deposit_Card();
-
-  // accessor
-  MoneyType GetLimitation() const;
-
-  // mutator
-  bool SetOverdraft();
-
-  bool Deposit(MoneyType amount);
-  bool Withdraw(MoneyType amount);
-  bool Transfer(std::string account, MoneyType amount);
-  bool Pay(MoneyType amount);
-};
 }  // namespace card
 
 #endif
