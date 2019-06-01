@@ -18,7 +18,8 @@ bool card_storage::AddCampusCard(const card::Card& campusCard) {
     return it->second->AddNewCard(card::CAMPUS_CARD, campusCard);
   }
   card::Binding_Card* temp = new BindingCard(campusCard);
-  storage.insert(campusCard.GetIdentifier(), temp);
+  storage.insert(campusCard.GetIdentifier(),
+                 temp);  //TODO::传递子类指针给父类指针时失败？
 }
 
 bool card_storage::AddDepositCard(int _identifier);
