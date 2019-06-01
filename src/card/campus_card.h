@@ -10,9 +10,9 @@ class Campus_Card : public Card {
 
  public:
   // contructor & destructor;
-  Campus_Card(int _identifier, std::string _userName, std::string _passwd,
-              std::string _studentId, std::string _department,
-              MoneyType _balance = 0);
+  Campus_Card(int _identifier = -1, std::string _userName = "NAN",
+              std::string _passwd = "NAN", std::string _studentId = "NAN",
+              std::string _department = "NAN", MoneyType _balance = 0);
   ~Campus_Card();
 
   // accessor

@@ -37,12 +37,12 @@ class card_storage {
 #endif
 
   // mutator
-  bool AddCampusCard(const card::Campus_Card& compusCard);
-  bool AddDepositCard(int _identifier);
+  bool AddCampusCard(card::Campus_Card& compusCard);
+  bool AddDepositCard(card::Deposit_Card& compusCard);
 
-  bool BindingCard(card::Card& card1, card::Card* card2);
+  bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
 
-  bool FindCard(int _identifier) const;
+  card::Binding_Card* FindCard(int _identifier) const;
 };
 
 }  // namespace cardSystem

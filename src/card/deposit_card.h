@@ -11,9 +11,9 @@ class Deposit_Card : public Card {
 
  public:
   // contructor & destructor;
-  Deposit_Card(int _identifer, std::string _name, std::string _passwd,
-               std::string _cardCode, MoneyType balance = 0,
-               int _overdraft = DEFAULT_OVERDRAFT_LIMIT);
+  Deposit_Card(int _identifer = -1, std::string _name = "NAN",
+               std::string _passwd = "NAN", std::string _cardCode = "NAN",
+               MoneyType balance = 0, int _overdraft = DEFAULT_OVERDRAFT_LIMIT);
   ~Deposit_Card();
 
   // accessor
@@ -21,6 +21,13 @@ class Deposit_Card : public Card {
   std::string GetInfo() const;
   std::string GetCardCode() const;
   // mutator
+  void Copy(const Deposit_Card &origin) {
+    this->SetName(origin.GetName());
+    this->SetPasswd(origin.GetPassword());
+    this->SetCardCode(origin.GetCardCode());
+    this->SetOverdraft(origin.GetOverdraft());
+  }
+
   bool SetOverdraft(MoneyType amount);
   bool SetCardCode(std::string code);
 

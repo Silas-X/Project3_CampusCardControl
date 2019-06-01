@@ -46,8 +46,8 @@ bool Deposit_Card::Deposit(MoneyType amount) {
   return true;
 }
 bool Deposit_Card::Withdraw(MoneyType amount) {
-  if (amount < 0) return false;                  //判断amount输入正确
-  if (this->balance - amount < 0) return false;  //取款不允许透支
+  if (amount < 0) return false;  //判断amount输入正确
+  if (this->balance + overdraft - amount < 0) return false;  //取款允许透支
   this->balance -= amount;
   return true;
 }

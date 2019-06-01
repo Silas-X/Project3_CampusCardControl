@@ -86,16 +86,29 @@ int main() {
 #endif
 
 #ifdef TEST_BINDING_CARD
+#define BINDING_TEST
+#define ACCOUNT_TEST
   cardSystem::card_storage* system = cardSystem::card_storage::init();
   card::Campus_Card STU1(1, "TESTNAME1", "password", "stuId", "department",
                          2333);
-  std::cout << STU1.GetInfo() << std::endl;
-  system->AddCampusCard(STU1);
-
+  // system->AddCampusCard(STU1);
   card::Campus_Card STU2(2, "TESTNAME2", "password", "stuId", "department",
                          2333);
-  std::cout << STU2.GetInfo() << std::endl;
   system->AddCampusCard(STU2);
+  card::Deposit_Card dep1(1, "TESTNAME1", "PASSWORD", "1234324", 213, 123);
+  system->AddDepositCard(dep1);
+  card::Deposit_Card dep2(2, "TESTNAME2", "PASSWORD", "1234324", 213, 500);
+  system->AddDepositCard(dep2);
+  system->BindingCard(STU1, dep1);
+  system->print();
+
+#ifdef BINDING_TEST
 #endif
+
+#ifdef ACCOUNT_TEST
+
+#endif
+#endif
+
   return 0;
 }
