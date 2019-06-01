@@ -11,6 +11,8 @@
  */
 
 #ifndef CONTROLLER_H_
+#define DEBUG_
+
 #define CONTROLLER_H_
 #include <map>
 #include "../card/binding_card.h"
@@ -29,7 +31,13 @@ class card_storage {
  public:
   card_storage* init();  // singletons
 
-  bool AddCampusCard(const card::Binding_Card& compusCard);
+// accesor
+#ifdef DEBUG_
+  void print() const;
+#endif
+
+  // mutator
+  bool AddCampusCard(const card::Campus_Card& compusCard);
   bool AddDepositCard(int _identifier);
 
   bool BindingCard(card::Card& card1, card::Card* card2);

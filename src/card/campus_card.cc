@@ -29,6 +29,15 @@ std::string Campus_Card::GetInfo() const {
 }
 
 // mutator
+void Campus_Card::Copy(const Campus_Card& origin) {
+  this->SetName(origin.GetName());
+  this->SetPasswd(origin.GetPassword());
+  this->SetStudentId(origin.GetStudentId());
+  this->SetDepartment(origin.GetDepartment());
+  this->SetIdentifier(origin.GetIdentifier());
+  return;
+}
+
 void Campus_Card::SetStudentId(std::string id) { this->studentId = id; }
 void Campus_Card::SetDepartment(std::string department) {
   this->department = department;

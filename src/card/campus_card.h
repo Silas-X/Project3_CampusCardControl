@@ -21,6 +21,7 @@ class Campus_Card : public Card {
 
   std::string GetInfo() const;
   // mutator
+  void Copy(const Campus_Card& origin);
   void SetStudentId(std::string id);
   void SetDepartment(std::string department);
 

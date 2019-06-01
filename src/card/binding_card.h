@@ -11,7 +11,12 @@ class Binding_Card : public Campus_Card, public Deposit_Card {
   Binding_Card(const Campus_Card &campusCard,
                const Deposit_Card &depositCard = Deposit_Card{-1, "NAN", "NAN",
                                                               "NAN", 0, 0});
+  // accessor
   int GetIdentifier() const;
+
+  // mutator
+  bool AddNewCard(CardType cardType, const Card &card);
+  bool AddCampusCard(Campus_Card &campusCard);
 };
 }  // namespace card
 
