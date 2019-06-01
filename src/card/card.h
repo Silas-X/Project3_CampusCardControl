@@ -16,7 +16,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
-#include "..\general\generalFun.h"
+#include "../general/generalFun.h"
 
 namespace card {
 using general::num2str;
