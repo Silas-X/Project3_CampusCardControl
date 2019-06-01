@@ -1,10 +1,10 @@
 #include "campus_card.h"
 #include <string>
 namespace card {
-Campus_Card::Campus_Card(std::string _userName, std::string _passwd,
-                         std::string _studentId, std::string _department,
-                         MoneyType _balance)
-    : Card{_userName, _passwd, _balance} {
+Campus_Card::Campus_Card(int _identifier, std::string _userName,
+                         std::string _passwd, std::string _studentId,
+                         std::string _department, MoneyType _balance)
+    : Card{_identifier, _userName, _passwd, _balance} {
   this->studentId = _studentId;
   this->department = _department;
 }

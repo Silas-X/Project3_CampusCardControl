@@ -1,10 +1,10 @@
 #include "deposit_card.h"
 namespace card {
 
-Deposit_Card::Deposit_Card(std::string _name, std::string _passwd,
-                           std::string _cardCode, MoneyType _balance,
-                           MoneyType _overdraft)
-    : Card{_name, _passwd, _balance},
+Deposit_Card::Deposit_Card(int _identifier, std::string _name,
+                           std::string _passwd, std::string _cardCode,
+                           MoneyType _balance, MoneyType _overdraft)
+    : Card{_identifier, _name, _passwd, _balance},
       cardCode{_cardCode},
       overdraft{_overdraft} {}
 Deposit_Card::~Deposit_Card() { overdraft = -1; }

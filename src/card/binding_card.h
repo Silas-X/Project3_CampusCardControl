@@ -9,7 +9,7 @@ class Binding_Card : public Campus_Card, public Deposit_Card {
  private:
  public:
   Binding_Card(const Campus_Card &campusCard,
-               const Deposit_Card &depositCard = Deposit_Card{"NAN", "NAN",
+               const Deposit_Card &depositCard = Deposit_Card{-1, "NAN", "NAN",
                                                               "NAN", 0, 0});
   int GetIdentifier() const;
 };

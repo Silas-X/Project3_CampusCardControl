@@ -10,7 +10,7 @@ class Campus_Card : public Card {
 
  public:
   // contructor & destructor;
-  Campus_Card(std::string _userName, std::string _passwd,
+  Campus_Card(int _identifier, std::string _userName, std::string _passwd,
               std::string _studentId, std::string _department,
               MoneyType _balance = 0);
   ~Campus_Card();

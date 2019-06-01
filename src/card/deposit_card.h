@@ -11,8 +11,9 @@ class Deposit_Card : public Card {
 
  public:
   // contructor & destructor;
-  Deposit_Card(std::string _name, std::string _passwd, std::string _cardCode,
-               MoneyType balance = 0, int _overdraft = DEFAULT_OVERDRAFT_LIMIT);
+  Deposit_Card(int _identifer, std::string _name, std::string _passwd,
+               std::string _cardCode, MoneyType balance = 0,
+               int _overdraft = DEFAULT_OVERDRAFT_LIMIT);
   ~Deposit_Card();
 
   // accessor
