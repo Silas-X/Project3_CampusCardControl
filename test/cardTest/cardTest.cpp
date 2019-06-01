@@ -1,7 +1,7 @@
 //#define TEST_CAMPUS_CARD
 //#define TEST_DEPOSIT_CARD
 #define TEST_BINDING_CARD
-#define DEBUG_
+//#define DEBUG_
 
 #ifdef DEBUG_
 #include "../../src/card/binding_card.cc"
@@ -16,7 +16,6 @@
 #include "../../src/card/card.h"
 #include "../../src/card/deposit_card.h"
 #include "../../src/sys/controller.h"
-
 
 int main() {
   std::string name;
@@ -87,27 +86,16 @@ int main() {
 #endif
 
 #ifdef TEST_BINDING_CARD
-  cardSystem::card_storage* system;
-  system->init();
+  cardSystem::card_storage* system = cardSystem::card_storage::init();
   card::Campus_Card STU1(1, "TESTNAME1", "password", "stuId", "department",
                          2333);
   std::cout << STU1.GetInfo() << std::endl;
-  try {
-    system->AddCampusCard(STU1);
-    throw "error1";
-  } catch (std::string str) {
-    std::cout << str << std::endl;
-  }
+  system->AddCampusCard(STU1);
 
   card::Campus_Card STU2(2, "TESTNAME2", "password", "stuId", "department",
                          2333);
   std::cout << STU2.GetInfo() << std::endl;
-  try {
-    system->AddCampusCard(STU2);
-    throw "error2";
-  } catch (std::string str) {
-    std::cout << str << std::endl;
-  }
+  system->AddCampusCard(STU2);
 #endif
   return 0;
 }

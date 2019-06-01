@@ -29,7 +29,7 @@ class card_storage {
   static card_storage* butler;
 
  public:
-  card_storage* init();  // singletons
+  static card_storage* init();  // singletons
 
 // accesor
 #ifdef DEBUG_
