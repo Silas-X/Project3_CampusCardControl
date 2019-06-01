@@ -10,15 +10,15 @@ card_storage* card_storage::init() {
   return butler;
 }
 
-bool card_storage::AddCampusCard(const card::Card& campusCard) {
+bool card_storage::AddCampusCard(const card::Binding_Card& campusCard) {
   // TODO::为binding card提供三种模式的构造器
   // TODO::为binding card 提供添加其内部两种卡片的函数
   map<int, card::Card*>::iterator it = storage.find(campusCard.GetIdentifier());
   if (it != storage.end) {
     return it->second->AddNewCard(card::CAMPUS_CARD, campusCard);
   }
-  card::Binding_Card* temp = new BindingCard(campusCard);
-  storage.insert(campusCard.GetIdentifier(), temp);
+  card::Binding_Card* temp = new card::Binding_Card(campusCard);
+  storage.insert(std::pair(campusCard.GetIdentifier(), temp));
 }
 
 bool card_storage::AddDepositCard(int _identifier);

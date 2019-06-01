@@ -22,14 +22,14 @@ namespace cardSystem {
 using std::map;
 class card_storage {
  private:
-  map<int, card::Card*> storage;
+  map<int, card::Binding_Card*> storage;
   card_storage();
   static card_storage* butler;
 
  public:
   card_storage* init();  // singletons
 
-  bool AddCampusCard(const card::Card& compusCard);
+  bool AddCampusCard(const card::Binding_Card& compusCard);
   bool AddDepositCard(int _identifier);
 
   bool BindingCard(card::Card& card1, card::Card* card2);
