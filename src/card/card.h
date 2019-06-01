@@ -24,6 +24,8 @@ using general::str2num;
 
 typedef int MoneyType;
 enum ErrorType { INVALID_AMOUNT };
+enum CardType { CAMPUS_CARD, DEPOSIT_CARD };
+
 struct Date {
   int year;
   int month;
@@ -71,6 +73,7 @@ class Card {
   virtual std::string GetInfo() const = 0;
 
   // mutator
+  void SetIdentifier(int _identifier);
   void SetName(std::string _name);
   void SetPasswd(std::string _passwd);
 

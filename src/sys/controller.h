@@ -13,6 +13,7 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 #include <map>
+#include "../card/binding_card.h"
 #include "../card/campus_card.h"
 #include "../card/card.h"
 #include "../card/deposit_card.h"
@@ -21,10 +22,19 @@ namespace cardSystem {
 using std::map;
 class card_storage {
  private:
-  map<int, card::Card*> cardsStorages;
+  map<int, card::Card*> storage;
+  card_storage();
+  static card_storage* butler;
 
  public:
- 
+  card_storage* init();  // singletons
+
+  bool AddCampusCard(const card::Card& compusCard);
+  bool AddDepositCard(int _identifier);
+
+  bool BindingCard(card::Card& card1, card::Card* card2);
+
+  bool FindCard(int _identifier) const;
 };
 
 }  // namespace cardSystem
