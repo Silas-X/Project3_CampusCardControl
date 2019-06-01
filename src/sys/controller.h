@@ -33,7 +33,7 @@ class card_storage {
 
 // accesor
 #ifdef DEBUG_
-  void print() const;
+  void print();
 #endif
 
   // mutator

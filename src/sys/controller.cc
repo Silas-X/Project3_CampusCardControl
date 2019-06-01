@@ -8,6 +8,7 @@ namespace cardSystem {
 // init Singleton
 using std::map;
 card_storage* card_storage::butler = NULL;
+card_storage::card_storage() { storage.clear(); }
 card_storage* card_storage::init() {
   if (butler == NULL) butler = new card_storage;
   return butler;
@@ -15,10 +16,11 @@ card_storage* card_storage::init() {
 
 // accessor
 #ifdef DEBUG_
-void card_storage::print() const {
-  map<int, card::Binding_Card*>::iterator it = storage.begin;
-  while (it != storage.end) {
+void card_storage::print() {
+  map<int, card::Binding_Card*>::iterator it = storage.begin();
+  while (it != storage.end()) {
     std::cout << it->second->GetIdentifier();
+    it++;
   }
   return;
 }
@@ -32,11 +34,12 @@ bool card_storage::AddCampusCard(const card::Campus_Card& campusCard) {
   // TODO::为binding card 提供添加其内部两种卡片的函数
   map<int, card::Binding_Card*>::iterator it =
       storage.find(campusCard.GetIdentifier());
-  if (it != storage.end) {
+  if (it != storage.end()) {
     return it->second->AddNewCard(card::CAMPUS_CARD, campusCard);
   }
   card::Binding_Card* temp = new card::Binding_Card(campusCard);
-  storage.insert(std::pair(campusCard.GetIdentifier(), temp));
+  storage.insert(
+      std::pair<int, card::Binding_Card*>(campusCard.GetIdentifier(), temp));
   return true;
 }
 

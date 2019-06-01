@@ -1,10 +1,22 @@
-#include <iostream>
-#include "..\..\src\card\campus_card.h"
-#include "..\..\src\card\card.h"
-#include "..\..\src\card\deposit_card.h"
-
 //#define TEST_CAMPUS_CARD
-#define TEST_DEPOSIT_CARD
+//#define TEST_DEPOSIT_CARD
+#define TEST_BINDING_CARD
+#define DEBUG_
+
+#ifdef DEBUG_
+#include "../../src/card/binding_card.cc"
+#include "../../src/card/campus_card.cc"
+#include "../../src/card/card.cc"
+#include "../../src/card/deposit_card.cc"
+#include "../../src/sys/controller.cc"
+#endif
+#include <iostream>
+#include "../../src/card/binding_card.h"
+#include "../../src/card/campus_card.h"
+#include "../../src/card/card.h"
+#include "../../src/card/deposit_card.h"
+#include "../../src/sys/controller.h"
+
 
 int main() {
   std::string name;
@@ -14,14 +26,14 @@ int main() {
   std::string cardCode;
   int num;
 
+  card::MoneyType amount;
 #ifdef TEST_CAMPUS_CARD
   std::cin >> name;
   std::cin >> password;
   std::cin >> stuId;
   std::cin >> department;
-  card::MoneyType amount;
   std::cin >> amount;
-  card::Campus_Card STU1(name, password, stuId, department, amount);
+  card::Campus_Card STU1(1, name, password, stuId, department, amount);
   std::cout << STU1.GetInfo() << std::endl;
   std::cout << STU1.GetBalance() << std::endl;
   std::cin >> num;
@@ -49,9 +61,8 @@ int main() {
   std::cin >> name;
   std::cin >> password;
   std::cin >> cardCode;
-  card::MoneyType amount;
   std::cin >> amount;
-  card::Deposit_Card dep1(name, password, cardCode, amount);
+  card::Deposit_Card dep1(2, name, password, cardCode, amount);
   std::cout << dep1.GetInfo() << std::endl;
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
@@ -73,6 +84,30 @@ int main() {
   dep1.SetCardCode(cardCode);
   dep1.SetOverdraft(num);
   std::cout << dep1.GetInfo() << std::endl;
+#endif
+
+#ifdef TEST_BINDING_CARD
+  cardSystem::card_storage* system;
+  system->init();
+  card::Campus_Card STU1(1, "TESTNAME1", "password", "stuId", "department",
+                         2333);
+  std::cout << STU1.GetInfo() << std::endl;
+  try {
+    system->AddCampusCard(STU1);
+    throw "error1";
+  } catch (std::string str) {
+    std::cout << str << std::endl;
+  }
+
+  card::Campus_Card STU2(2, "TESTNAME2", "password", "stuId", "department",
+                         2333);
+  std::cout << STU2.GetInfo() << std::endl;
+  try {
+    system->AddCampusCard(STU2);
+    throw "error2";
+  } catch (std::string str) {
+    std::cout << str << std::endl;
+  }
 #endif
   return 0;
 }
