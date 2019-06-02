@@ -1,7 +1,7 @@
 #include "binding_card.h"
 
 namespace card {
-
+Binding_Card::Binding_Card() : campusExist{false}, depositExist{false} {}
 Binding_Card::Binding_Card(const Campus_Card &campusCard)
     : Campus_Card{campusCard},
       Deposit_Card{},
@@ -40,6 +40,8 @@ bool Binding_Card::IsBinding() const { return binding; }
 // mutators//子类利用父类指针传递但无法执行进一步操作，再次利用其子类性质操作
 // TODO:如何利用多态的性质从而实现一个函数能够传递多个函数再分发？
 bool Binding_Card::AddNewCard(CardType cardType, Card *current) {
+  this->Campus_Card::SetIdentifier(current->GetIdentifier());
+  this->Campus_Card::SetName(current->GetName());
   switch (cardType) {
     case CAMPUS_CARD:
       return AddCampusCard(dynamic_cast<Campus_Card *>(current));

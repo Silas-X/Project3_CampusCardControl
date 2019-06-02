@@ -12,9 +12,10 @@ class Binding_Card : public Campus_Card, public Deposit_Card {
   bool binding;
 
  public:
-  Binding_Card(const Campus_Card &campusCard);
-  Binding_Card(const Deposit_Card &depositCard);
-  Binding_Card(const Campus_Card &campusCard, const Deposit_Card &depositCard);
+  Binding_Card();
+  Binding_Card(const Campus_Card& campusCard);
+  Binding_Card(const Deposit_Card& depositCard);
+  Binding_Card(const Campus_Card& campusCard, const Deposit_Card& depositCard);
 
   // accessor
   int GetIdentifier() const;
@@ -25,20 +26,20 @@ class Binding_Card : public Campus_Card, public Deposit_Card {
   bool IsBinding() const;
 
   // mutator
-  bool AddNewCard(CardType cardType, Card *card);
-  bool AddCampusCard(Campus_Card *campusCard);
-  bool AddDepositCard(Deposit_Card *depositCard);
+  bool AddNewCard(CardType cardType, Card* card);
+  bool AddCampusCard(Campus_Card* campusCard);
+  bool AddDepositCard(Deposit_Card* depositCard);
   bool SetBindingCards();
 
   // Account Operations
   bool Deposit(MoneyType amount, CardType targetCard = DEPOSIT_CARD);
-  bool Withdraw(MoneyType amount,CardType targetCard = ALL_CARD);
+  bool Withdraw(MoneyType amount, CardType targetCard = ALL_CARD);
 
-  bool Pay(MoneyType amount,CardType targetCard = ALL_CARD);
+  bool Pay(MoneyType amount, CardType targetCard = ALL_CARD);
   bool Transfer(MoneyType amount, CardType src = DEPOSIT_CARD,
                 CardType dest = CAMPUS_CARD);
-                
 };
+
 }  // namespace card
 
 #endif

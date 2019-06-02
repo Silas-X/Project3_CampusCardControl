@@ -14,7 +14,9 @@
 #define DEBUG_
 
 #define CONTROLLER_H_
+#include <iomanip>
 #include <map>
+#include <vector>
 #include "../card/binding_card.h"
 #include "../card/campus_card.h"
 #include "../card/card.h"
@@ -35,7 +37,7 @@ class card_storage {
 #ifdef DEBUG_
   void print();
 #endif
-
+  void PrintAll(std::string ctrl = "OneLine");
   // mutator
   bool AddCampusCard(card::Campus_Card& compusCard);
   bool AddDepositCard(card::Deposit_Card& compusCard);
@@ -43,7 +45,7 @@ class card_storage {
   bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
 
   card::Binding_Card* FindCard(int _identifier) const;
-
+  std::vector<card::Binding_Card*> FindCard(std::string _name);
   // Account operations
   bool Deposit(card::MoneyType amount, card::Binding_Card current,
                card::CardType cardType = card::DEPOSIT_CARD);
