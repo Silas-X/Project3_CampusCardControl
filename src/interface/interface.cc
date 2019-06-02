@@ -44,6 +44,7 @@ bool Interface::Dispatch() {
 }
 
 Interface::Menus Interface::Guard(MenuType& currentMenu) {
+    system("reset");
   StatusBar();
   std::string userMessage;
   (this->*currentMenu.MenuInfo)();
@@ -75,7 +76,7 @@ Interface::Menus Interface::MainMenu(std::string message) {
       return CAMPUS_MENU;
     case 3:
       return DEPOSIT_MENU;
-    case 4:
+    case 0:
       return EXIT;
   }
   return MAIN_MENU;
