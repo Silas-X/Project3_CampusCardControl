@@ -43,7 +43,21 @@ class card_storage {
   bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
 
   card::Binding_Card* FindCard(int _identifier) const;
-};
+
+  // Account operations
+  bool Deposit(card::MoneyType amount, card::Binding_Card current,
+               card::CardType cardType = card::DEPOSIT_CARD);
+  bool Withdraw(card::MoneyType amount, card::Binding_Card current,
+                card::CardType cardType = card::DEPOSIT_CARD);
+  bool Pay(card::MoneyType amount, card::Binding_Card current,
+           card::CardType cardType = card::DEPOSIT_CARD);
+  bool ExternalTransfer(card::MoneyType amount, card::Binding_Card* src,
+                        card::Binding_Card* dest,
+                        card::CardType srcType1 = card::DEPOSIT_CARD,
+                        card::CardType destType2 = card::DEPOSIT_CARD);
+  bool InternalTransfer(card::MoneyType amount, card::Binding_Card* holder,
+                        card::CardType src = card::DEPOSIT_CARD,
+                        card::CardType dest = card::CAMPUS_CARD){};
 
 }  // namespace cardSystem
 

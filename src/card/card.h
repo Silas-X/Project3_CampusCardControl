@@ -24,7 +24,7 @@ using general::str2num;
 
 typedef int MoneyType;
 enum ErrorType { INVALID_AMOUNT };
-enum CardType { CAMPUS_CARD, DEPOSIT_CARD };
+enum CardType { CAMPUS_CARD, DEPOSIT_CARD,ALL_CARD };
 
 struct Date {
   int year;

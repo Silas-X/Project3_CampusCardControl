@@ -75,8 +75,11 @@ bool Binding_Card::Deposit(MoneyType amount, CardType targetCard) {
   return false;
 }
 
-bool Binding_Card::Withdraw(MoneyType amount) {
+bool Binding_Card::Withdraw(MoneyType amount, CardType targetCard) {
   if (amount < 0) return false;
+  if (targetCard == CAMPUS_CARD) return this->Campus_Card::Withdraw(amount);
+  if (targetCard == DEPOSIT_CARD) return this->Deposit_Card::Withdraw(amount);
+  // targetCard==ALL_CARD;
   if (this->Campus_Card::Withdraw(amount)) return true;
   if (this->Deposit_Card::Withdraw(amount)) return true;
   if (this->Campus_Card::balance + this->Deposit_Card::balance +
@@ -89,8 +92,11 @@ bool Binding_Card::Withdraw(MoneyType amount) {
   return false;
 }
 
-bool Binding_Card::Pay(MoneyType amount) {
+bool Binding_Card::Pay(MoneyType amount, CardType targetCard) {
   if (amount < 0) return false;
+  if (targetCard == CAMPUS_CARD) return this->Campus_Card::Pay(amount);
+  if (targetCard == DEPOSIT_CARD) return this->Deposit_Card::Pay(amount);
+  // targetCard==ALL_CARD;
   if (this->Campus_Card::Pay(amount)) return true;
   if (this->Deposit_Card::Pay(amount)) return true;
   if (this->Campus_Card::balance + this->Deposit_Card::balance +

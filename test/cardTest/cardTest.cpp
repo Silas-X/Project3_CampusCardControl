@@ -100,13 +100,21 @@ int main() {
   card::Deposit_Card dep2(2, "TESTNAME2", "PASSWORD", "1234324", 213, 500);
   system->AddDepositCard(dep2);
   system->BindingCard(STU1, dep1);
-  system->print();
+  //  system->print();
 
 #ifdef BINDING_TEST
 #endif
 
 #ifdef ACCOUNT_TEST
-
+  card::Binding_Card* ptr = system->FindCard(1);
+  ptr->Deposit(100, card::CAMPUS_CARD);
+  ptr->Deposit(100);
+  std::cout << ptr->GetInfo() << std::endl;
+  ptr->Withdraw(300);
+  ptr->Pay(300);  ptr->Deposit(200);
+  ptr->Transfer(100);
+  ptr->Transfer(100, card::CAMPUS_CARD, card::DEPOSIT_CARD);
+  std::cout << ptr->GetInfo() << std::endl;
 #endif
 #endif
 

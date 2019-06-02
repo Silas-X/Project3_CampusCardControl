@@ -1,5 +1,4 @@
 #define DEBUG_
-
 #include "controller.h"
 #include <iostream>
 #include <map>
@@ -66,6 +65,45 @@ bool card_storage::BindingCard(card::Campus_Card& card1,
 
 card::Binding_Card* card_storage::FindCard(int _identifier) const {
   return storage.find(_identifier)->second;
+}
+
+// Account operations
+bool card_storage::Deposit(card::MoneyType amount, card::Binding_Card current,
+                           card::CardType cardType = card::DEPOSIT_CARD) {
+  if (amount < 0) return false;
+  return current.Deposit(amount, cardType);
+}
+bool card_storage::Withdraw(card::MoneyType amount, card::Binding_Card current,
+                            card::CardType cardType = card::DEPOSIT_CARD) {
+  if (amount < 0) return false;
+  return current.Withdraw(amount, cardType);
+}
+bool card_storage::Pay(card::MoneyType amount, card::Binding_Card current,
+                       card::CardType cardType = card::DEPOSIT_CARD) {
+  if (amount < 0) return false;
+  return current.Pay(amount, cardType);
+}
+
+bool card_storage::ExternalTransfer(card::MoneyType amount,
+                                    card::Binding_Card* src,
+                                    card::Binding_Card* dest,
+                                    card::CardType srcType,
+                                    card::CardType destType) {
+  if (amount < 0) return false;
+  if (src == dest) return false;
+  if (!src->Withdraw(amount, srcType)) return false;
+  if (!dest->Deposit(amount, destType)) {
+    src->Deposit(amount, srcType);
+    return false;
+  }
+  return true;
+}
+
+bool card_storage::InternalTransfer(card::MoneyType amount,
+                                    card::Binding_Card* holder,
+                                    card::CardType src, card::CardType dest) {
+  if (amount < 0) return false;
+  return (holder->Transfer(amount, src, dest));
 }
 
 }  // namespace cardSystem
