@@ -115,9 +115,11 @@ Interface::Menus Interface::HolderMenu(std::string message) {
       Add();
       break;
     case 4:
-      //      Modify();
+      Modify();
+      break;
     case 5:
-      //      Delete();
+      Delete();
+      break;
     case 6:
       return MAIN_MENU;
   }
@@ -138,10 +140,11 @@ void Interface::StatusBar() const {
 
 void Interface::LookUp() {
   foundedList.clear();
-  std::cout << "请输入查询用户名或标识符" << std::endl;
+  std::cout << "请输入查询/修改用户名或标识符" << std::endl;
   std::string message;
   int _identifier;
-  getline(std::cin, message);
+  // getline(std::cin, message);
+  std::cin >> message;
   card::Binding_Card* holder = NULL;
 
   if (general::str2num(message, _identifier)) {
@@ -211,7 +214,226 @@ void Interface::Add() {
     cardCore->BindingCard(campusCard, depositCard);
   }
 }
+bool Interface::ChooseAccount() {
+  std::cout << "[1] 显示全部账户" << std::endl;
+  std::cout << "[2] 选择修改账户" << std::endl;
+  std::cout << "[0] 返回上级菜单" << std::endl;
+  int option;
+  std::string message;
+  std::cin >> message;
+  while (!general::str2num(message, option)) {
+    std::cout << "输入有误,请重试" << std::endl;
+    std::cin >> message;
+  }
+  if (option == 0) return false;
+  if (option == 1) {
+    cardCore->PrintAll();
+  }
+  LookUp();
+  selected = (foundedList.empty()) ? NULL : *(foundedList.begin());
+  return true;
+}
+void Interface::Modify() {
+  bool exitFlag = false;
+  while (selected == NULL) {
+    if (!ChooseAccount()) return;
+  }
+  while (!exitFlag) {
+    std::cout << selected->GetInfo() << std::endl;
+    std::cout << "请选择需要修改的卡片类型" << std::endl;
+    std::cout << "[1] 修改基本信息" << std::endl;
+    std::cout << "[2] 修改校园卡信息" << std::endl;
+    std::cout << "[3] 修改储蓄卡信息" << std::endl;
+    std::cout << "[4] 更改选择账户" << std::endl;
+    std::cout << "[0] 返回上级菜单" << std::endl;
+    int option;
+    std::string message;
+    std::cin >> message;
+    while (!general::str2num(message, option)) {
+      std::cout << "输入有误,请重试" << std::endl;
+      std::cin >> message;
+    }
+    switch (option) {
+      case 1:
+        ModifyBasic();
+        break;
+      case 2:
+        ModifyCampus();
+        break;
+      case 3:
+        ModifyDeposit();
+        break;
+      case 4:
+        ChooseAccount();
+        break;
+      case 0:
+        exitFlag = true;
+      default:
+        std::cout << "无效输入" << std::endl;
+    }
+  }
+  return;
+}
+void Interface::ModifyBasic() {
+  bool exitFlag = false;
+  while (!exitFlag) {
+    system("reset");
+    std::cout << selected->GetInfo() << std::endl;
+    Print(std::vector<card::Binding_Card*>{selected});
+    std::cout << "请选择需要修改的信息" << std::endl;
+    std::cout << "[1] 修改姓名" << std::endl;
+    std::cout << "[2] 修改密码" << std::endl;
+    std::cout << "[0] 返回上级菜单" << std::endl;
+    int option;
+    std::string message;
+    std::cin >> message;
+    while (!general::str2num(message, option)) {
+      std::cout << "输入有误,请重试" << std::endl;
+      std::cin >> message;
+    }
+    std::string name;
+    std::string passwd;
+    card::MoneyType amount;
+    switch (option) {
+      case 1:
+        ui::ReadInName(std::cin, name);
+        selected->Campus_Card::SetName(name);
+        selected->Deposit_Card::SetName(name);
+        break;
+      case 2:
+        ui::ReadInPasswd(std::cin, passwd);
+        selected->Campus_Card::SetPasswd(passwd);
+        selected->Deposit_Card::SetPasswd(passwd);
+        break;
+      case 0:
+        exitFlag = true;
+        break;
+    }
+  }
+}
 
+void Interface::ModifyCampus() {
+  bool exitFlag = false;
+  while (!exitFlag) {
+    system("reset");
+    std::cout << selected->Campus_Card::GetInfo() << std::endl;
+    Print(std::vector<card::Binding_Card*>{selected});
+    std::cout << "请选择需要修改的信息" << std::endl;
+    std::cout << "[1] 修改学号" << std::endl;
+    std::cout << "[2] 修改学院" << std::endl;
+    std::cout << "[3] 修改余额" << std::endl;
+    std::cout << "[0] 返回上级菜单" << std::endl;
+    int option;
+    std::string message;
+    std::cin >> message;
+    while (!general::str2num(message, option)) {
+      std::cout << "输入有误,请重试" << std::endl;
+      std::cin >> message;
+    }
+    std::string studentId;
+    std::string department;
+    card::MoneyType amount;
+    switch (option) {
+      case 1:
+        ui::ReadInStudentId(std::cin, studentId);
+        selected->Campus_Card::SetStudentId(studentId);
+        break;
+      case 2:
+        ui::ReadInDepartment(std::cin, department);
+        selected->Campus_Card::SetDepartment(department);
+        break;
+      case 3:
+        ui::ReadInBalance(std::cin, amount);
+        selected->Campus_Card::SetBalance(amount);
+        break;
+      case 0:
+        exitFlag = true;
+        break;
+    }
+  }
+}
+void Interface::ModifyDeposit() {
+  bool exitFlag = false;
+  while (!exitFlag) {
+    system("reset");
+    std::cout << selected->Deposit_Card::GetInfo() << std::endl;
+    Print(std::vector<card::Binding_Card*>{selected});
+    std::cout << "请选择需要修改的信息" << std::endl;
+    std::cout << "[1] 修改卡号" << std::endl;
+    std::cout << "[2] 修改余额" << std::endl;
+    std::cout << "[3] 修改透支上限" << std::endl;
+    std::cout << "[0] 返回上级菜单" << std::endl;
+    int option;
+    std::string message;
+    std::cin >> message;
+    while (!general::str2num(message, option)) {
+      std::cout << "输入有误,请重试" << std::endl;
+      std::cin >> message;
+    }
+    std::string cardCode;
+    card::MoneyType amount;
+    switch (option) {
+      case 1:
+        ui::ReadInCardCode(std::cin, cardCode);
+        selected->Deposit_Card::SetCardCode(cardCode);
+        break;
+      case 2:
+        ui::ReadInBalance(std::cin, amount);
+        selected->Deposit_Card::SetBalance(amount);
+        break;
+      case 3:
+        ui::ReadInOverdraft(std::cin, amount);
+        selected->Deposit_Card::SetOverdraft(amount);
+        break;
+      case 0:
+        exitFlag = true;
+        break;
+    }
+  }
+}
+
+void Interface::Delete() {
+  bool exitFlag = false;
+  while (selected == NULL) {
+    if (!ChooseAccount()) return;
+  }
+  while (!exitFlag) {
+    std::cout << selected->GetInfo() << std::endl;
+    std::cout << "请选择需要删除的卡片类型" << std::endl;
+    std::cout << "[1] 删除该账户" << std::endl;
+    std::cout << "[2] 删除校园卡信息" << std::endl;
+    std::cout << "[3] 删除储蓄卡信息" << std::endl;
+    std::cout << "[4] 更改选择账户" << std::endl;
+    std::cout << "[0] 返回上级菜单" << std::endl;
+    int option;
+    std::string message;
+    std::cin >> message;
+    while (!general::str2num(message, option)) {
+      std::cout << "输入有误,请重试" << std::endl;
+      std::cin >> message;
+    }
+    switch (option) {
+      case 1:
+        cardCore->DeleteCard(selected->GetIdentifier());
+        return;
+        break;
+      case 2:
+        cardCore->DeleteCampusCard(selected->GetIdentifier());
+        break;
+      case 3:
+        cardCore->DeleteDepositCard(selected->GetIdentifier());
+        break;
+      case 4:
+        ChooseAccount();
+        break;
+      case 0:
+        exitFlag = true;
+      default:
+        std::cout << "无效输入" << std::endl;
+    }
+  }
+  return;
+}
 void Interface::Print(std::vector<card::Binding_Card*> list) {
   if (list.empty()) {
     std::cout << "不存在任何结果！" << std::endl;

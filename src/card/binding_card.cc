@@ -69,7 +69,14 @@ bool Binding_Card::SetBindingCards() {
   this->binding = (campusExist & depositExist);
   return this->binding;
 }
-
+bool Binding_Card::SetCampusStatus(bool status) {
+  this->campusExist = status;
+  return true;
+}
+bool Binding_Card::SetDepositStatus(bool status) {
+  this->depositExist = status;
+  return true;
+}
 // Account Operations
 bool Binding_Card::Deposit(MoneyType amount, CardType targetCard) {
   if (targetCard == CAMPUS_CARD) return this->Campus_Card::Deposit(amount);

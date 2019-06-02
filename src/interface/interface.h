@@ -58,7 +58,11 @@ class Interface {
   // API
   void LookUp();
   void Add();
+  bool ChooseAccount();
   void Modify();
+  void ModifyBasic();
+  void ModifyCampus();
+  void ModifyDeposit();
   void Delete();
   void Print(std::vector<card::Binding_Card*> list);
 };

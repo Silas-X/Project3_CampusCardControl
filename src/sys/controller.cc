@@ -39,7 +39,7 @@ void card_storage::PrintAll(std::string ctrl) {
   while (it != storage.end()) {
     if (ctrl == "OneLine") {
       std::cout << it->second->Campus_Card::GetIdentifier()
-                << it->second->Campus_Card::GetName() << std::endl;
+                <<"\t\t\t"<< it->second->Campus_Card::GetName() << std::endl;
     }
     it++;
   }
