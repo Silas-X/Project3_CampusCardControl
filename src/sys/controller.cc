@@ -69,17 +69,17 @@ card::Binding_Card* card_storage::FindCard(int _identifier) const {
 
 // Account operations
 bool card_storage::Deposit(card::MoneyType amount, card::Binding_Card current,
-                           card::CardType cardType = card::DEPOSIT_CARD) {
+                           card::CardType cardType ) {
   if (amount < 0) return false;
   return current.Deposit(amount, cardType);
 }
 bool card_storage::Withdraw(card::MoneyType amount, card::Binding_Card current,
-                            card::CardType cardType = card::DEPOSIT_CARD) {
+                            card::CardType cardType ) {
   if (amount < 0) return false;
   return current.Withdraw(amount, cardType);
 }
 bool card_storage::Pay(card::MoneyType amount, card::Binding_Card current,
-                       card::CardType cardType = card::DEPOSIT_CARD) {
+                       card::CardType cardType) {
   if (amount < 0) return false;
   return current.Pay(amount, cardType);
 }

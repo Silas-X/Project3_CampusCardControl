@@ -57,8 +57,8 @@ class card_storage {
                         card::CardType destType2 = card::DEPOSIT_CARD);
   bool InternalTransfer(card::MoneyType amount, card::Binding_Card* holder,
                         card::CardType src = card::DEPOSIT_CARD,
-                        card::CardType dest = card::CAMPUS_CARD){};
-
+                        card::CardType dest = card::CAMPUS_CARD);
+};
 }  // namespace cardSystem
 
 #endif
