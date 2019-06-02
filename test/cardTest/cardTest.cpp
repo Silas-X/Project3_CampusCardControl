@@ -1,24 +1,27 @@
+//#define DEBUG_
 //#define TEST_CAMPUS_CARD
 //#define TEST_DEPOSIT_CARD
-#define TEST_BINDING_CARD
-//#define DEBUG_
+//#define TEST_BINDING_CARD
+#define TEST_MENU
 
 #ifdef DEBUG_
 #include "../../src/card/binding_card.cc"
 #include "../../src/card/campus_card.cc"
 #include "../../src/card/card.cc"
 #include "../../src/card/deposit_card.cc"
+#include "../../src/interface/interface.cc"
 #include "../../src/sys/controller.cc"
 #endif
+
 #include <iostream>
 #include "../../src/card/binding_card.h"
 #include "../../src/card/campus_card.h"
 #include "../../src/card/card.h"
 #include "../../src/card/deposit_card.h"
+#include "../../src/interface/interface.h"
 #include "../../src/sys/controller.h"
 
-int main()
-{
+int main() {
   std::string name;
   std::string password;
   std::string stuId;
@@ -27,6 +30,7 @@ int main()
   int num;
 
   card::MoneyType amount;
+  cardSystem::card_storage *system = cardSystem::card_storage::init();
 #ifdef TEST_CAMPUS_CARD
   std::cin >> name;
   std::cin >> password;
@@ -66,16 +70,13 @@ int main()
   std::cout << dep1.GetInfo() << std::endl;
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Deposit(num))
-    std::cout << "FAILUSE\n";
+  if (!dep1.Deposit(num)) std::cout << "FAILUSE\n";
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Withdraw(num))
-    std::cout << "FAILURE\n";
+  if (!dep1.Withdraw(num)) std::cout << "FAILURE\n";
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Pay(num))
-    std::cout << "FAILURE\n";
+  if (!dep1.Pay(num)) std::cout << "FAILURE\n";
   std::cout << dep1.GetBalance() << std::endl;
 
   std::cin >> name;
@@ -92,7 +93,6 @@ int main()
 #ifdef TEST_BINDING_CARD
 #define BINDING_TEST
 #define ACCOUNT_TEST
-  cardSystem::card_storage *system = cardSystem::card_storage::init();
   card::Campus_Card STU1(1, "TESTNAME1", "password", "stuId", "department",
                          2333);
   // system->AddCampusCard(STU1);
@@ -127,5 +127,10 @@ int main()
 #endif
 #endif
 
+#ifdef TEST_MENU
+  ui::Interface *userWindow = ui::Interface::InitInterface(system);
+  userWindow->SetOpt(ui::Interface::MAIN_MENU);
+  userWindow->Dispatch();
+#endif
   return 0;
 }
