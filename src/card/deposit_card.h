@@ -1,15 +1,17 @@
 #ifndef DEPOSIT_CARD_H_
 #define DEPOSIT_CARD_H_
 #include "card.h"
-namespace card {
-const int DEFAULT_OVERDRAFT_LIMIT = 3000;  //默认透支上限
+namespace card
+{
+const int DEFAULT_OVERDRAFT_LIMIT = 3000; //默认透支上限
 
-class Deposit_Card : public Card {
- private:
-  MoneyType overdraft;  // The limit amount of making an overdraft;
+class Deposit_Card : public Card
+{
+private:
+  MoneyType overdraft; // The limit amount of making an overdraft;
   std::string cardCode;
 
- public:
+public:
   // contructor & destructor;
   Deposit_Card(int _identifer = -1, std::string _name = "NAN",
                std::string _passwd = "NAN", std::string _cardCode = "NAN",
@@ -21,10 +23,12 @@ class Deposit_Card : public Card {
   std::string GetInfo() const;
   std::string GetCardCode() const;
   // mutator
-  void Copy(const Deposit_Card &origin) {
+  void Copy(const Deposit_Card &origin)
+  {
     this->SetName(origin.GetName());
     this->SetPasswd(origin.GetPassword());
     this->SetCardCode(origin.GetCardCode());
+    this->SetBalance(origin.GetBalance());
     this->SetOverdraft(origin.GetOverdraft());
   }
 
@@ -35,6 +39,6 @@ class Deposit_Card : public Card {
   bool Withdraw(MoneyType amount);
   bool Pay(MoneyType amount);
 };
-}  // namespace card
+} // namespace card
 
 #endif

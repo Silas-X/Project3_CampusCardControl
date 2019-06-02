@@ -18,47 +18,62 @@
 #include <string>
 #include "../general/generalFun.h"
 
-namespace card {
+namespace card
+{
 using general::num2str;
 using general::str2num;
 
 typedef int MoneyType;
-enum ErrorType { INVALID_AMOUNT };
-enum CardType { CAMPUS_CARD, DEPOSIT_CARD,ALL_CARD };
+enum ErrorType
+{
+  INVALID_AMOUNT
+};
+enum CardType
+{
+  CAMPUS_CARD,
+  DEPOSIT_CARD,
+  ALL_CARD
+};
 
-struct Date {
+struct Date
+{
   int year;
   int month;
   int day;
   Date(int y = 0, int m = 0, int d = 0) : year{y}, month{m}, day{d} {}
-  bool SetYear(int year) {
+  bool SetYear(int year)
+  {
     this->year = year;
     return true;
   }
-  bool SetMonth(int month) {
+  bool SetMonth(int month)
+  {
     this->month = month;
     return true;
   }
-  bool SetDay(int day) {
+  bool SetDay(int day)
+  {
     this->day = day;
     return true;
   }
-  std::string GetDate() {
+  std::string GetDate()
+  {
     std::string res = "Year: " + num2str(year) + "\nMonth: " + num2str(month) +
                       "\nDay: " + num2str(day);
     return res;
   }
 };
 
-class Card {
- protected:
+class Card
+{
+protected:
   int identifier;
   std::string userName;
   std::string passwd;
   MoneyType balance;
   Date issueDate;
   // TODO::增加卡片状态(激活，冻结，注销)
- public:
+public:
   // constructor & destructor
   Card(int _identifier, std::string _userName, std::string _passwd,
        MoneyType _balance = 0);
@@ -76,12 +91,12 @@ class Card {
   void SetIdentifier(int _identifier);
   void SetName(std::string _name);
   void SetPasswd(std::string _passwd);
-
+  void SetBalance(MoneyType amount);
   virtual bool Deposit(MoneyType amount) = 0;
   virtual bool Withdraw(MoneyType amount) = 0;
   virtual bool Pay(MoneyType amount) = 0;
 };
 
-}  // namespace card
+} // namespace card
 
 #endif

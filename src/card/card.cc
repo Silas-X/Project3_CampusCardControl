@@ -1,7 +1,8 @@
 #include "card.h"
 #include <string>
 
-namespace card {
+namespace card
+{
 Card::Card(int _identifier, std::string _userName, std::string _passwd,
            MoneyType _balance)
     : identifier{_identifier},
@@ -20,5 +21,5 @@ Date Card::GetIssueDate() const { return issueDate; }
 void Card::SetIdentifier(int _identifier) { identifier = _identifier; }
 void Card::SetName(std::string _name) { userName = _name; }
 void Card::SetPasswd(std::string _passwd) { this->passwd = _passwd; }
-
-}  // namespace card
+void Card::SetBalance(MoneyType amount) { this->balance = amount; }
+} // namespace card

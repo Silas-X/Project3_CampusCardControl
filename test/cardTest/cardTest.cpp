@@ -17,7 +17,8 @@
 #include "../../src/card/deposit_card.h"
 #include "../../src/sys/controller.h"
 
-int main() {
+int main()
+{
   std::string name;
   std::string password;
   std::string stuId;
@@ -65,13 +66,16 @@ int main() {
   std::cout << dep1.GetInfo() << std::endl;
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Deposit(num)) std::cout << "FAILUSE\n";
+  if (!dep1.Deposit(num))
+    std::cout << "FAILUSE\n";
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Withdraw(num)) std::cout << "FAILURE\n";
+  if (!dep1.Withdraw(num))
+    std::cout << "FAILURE\n";
   std::cout << dep1.GetBalance() << std::endl;
   std::cin >> num;
-  if (!dep1.Pay(num)) std::cout << "FAILURE\n";
+  if (!dep1.Pay(num))
+    std::cout << "FAILURE\n";
   std::cout << dep1.GetBalance() << std::endl;
 
   std::cin >> name;
@@ -88,7 +92,7 @@ int main() {
 #ifdef TEST_BINDING_CARD
 #define BINDING_TEST
 #define ACCOUNT_TEST
-  cardSystem::card_storage* system = cardSystem::card_storage::init();
+  cardSystem::card_storage *system = cardSystem::card_storage::init();
   card::Campus_Card STU1(1, "TESTNAME1", "password", "stuId", "department",
                          2333);
   // system->AddCampusCard(STU1);
@@ -106,14 +110,19 @@ int main() {
 #endif
 
 #ifdef ACCOUNT_TEST
-  card::Binding_Card* ptr = system->FindCard(1);
+  card::Binding_Card *ptr = system->FindCard(1);
   ptr->Deposit(100, card::CAMPUS_CARD);
   ptr->Deposit(100);
   std::cout << ptr->GetInfo() << std::endl;
   ptr->Withdraw(300);
-  ptr->Pay(300);  ptr->Deposit(200);
+  std::cout << ptr->GetInfo() << std::endl;
+  ptr->Pay(300);
+  std::cout << ptr->GetInfo() << std::endl;
+  ptr->Deposit(200);
+  std::cout << ptr->GetInfo() << std::endl;
   ptr->Transfer(100);
-  ptr->Transfer(100, card::CAMPUS_CARD, card::DEPOSIT_CARD);
+  std::cout << ptr->GetInfo() << std::endl;
+  ptr->Transfer(100000, card::CAMPUS_CARD, card::DEPOSIT_CARD);
   std::cout << ptr->GetInfo() << std::endl;
 #endif
 #endif
