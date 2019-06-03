@@ -38,6 +38,7 @@ class card_storage {
   void print();
 #endif
   void PrintAll(std::string ctrl = "OneLine");
+  std::vector<std::string> GetAllIdentifier();
   // mutator
   bool DeleteCard(int _identifier) { storage.erase(_identifier); }
   bool DeleteCampusCard(int _identifier) {

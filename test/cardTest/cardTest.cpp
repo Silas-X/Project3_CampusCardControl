@@ -18,6 +18,7 @@
 #include "../../src/card/campus_card.h"
 #include "../../src/card/card.h"
 #include "../../src/card/deposit_card.h"
+#include "../../src/interface/data_base.h"
 #include "../../src/interface/interface.h"
 #include "../../src/sys/controller.h"
 
@@ -129,9 +130,12 @@ int main() {
 #endif
 
 #ifdef TEST_MENU
-  ui::Interface *userWindow = ui::Interface::InitInterface(system,logCore);
+  ui::Interface *userWindow = ui::Interface::InitInterface(system, logCore);
   userWindow->SetOpt(ui::Interface::MAIN_MENU);
   userWindow->Dispatch();
+  fileSystem::Data_Base *fileCore =
+      fileSystem::Data_Base::Init(system, logCore);
+  fileCore->WriteOutData();
 #endif
   return 0;
 }
