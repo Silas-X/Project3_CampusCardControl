@@ -1,11 +1,14 @@
 #include "interface.h"
 #include <iostream>
+#include "log_it.h"
 namespace ui {
 Interface* Interface::userInterface = NULL;
-Interface::Interface(cardSystem::card_storage* _cardCore)
-    : cardCore{_cardCore} {}
-Interface* Interface::InitInterface(cardSystem::card_storage* _cardCore) {
-  if (userInterface == NULL) userInterface = new Interface{_cardCore};
+Interface::Interface(cardSystem::card_storage* _cardCore,
+                     logit::LogIt* _logCore)
+    : cardCore{_cardCore}, logCore{_logCore} {}
+Interface* Interface::InitInterface(cardSystem::card_storage* _cardCore,
+                                    logit::LogIt* _logCore) {
+  if (userInterface == NULL) userInterface = new Interface{_cardCore, _logCore};
   return userInterface;
 }
 
@@ -103,13 +106,13 @@ Interface::Menus Interface::HolderMenu(std::string message) {
       return MAIN_MENU;
     case 1:
       cardCore->PrintAll("OneLine");
-      getchar();
+      general::Pause();
       break;
     case 2:
       LookUp();
       selected = (foundedList.empty()) ? NULL : *(foundedList.begin());
       Print(foundedList);
-      getchar();
+      general::Pause();
       break;
     case 3:
       Add();
@@ -143,8 +146,8 @@ void Interface::LookUp() {
   std::cout << "请输入查询/修改用户名或标识符" << std::endl;
   std::string message;
   int _identifier;
-  // getline(std::cin, message);
-  std::cin >> message;
+  //getline(std::cin, message);
+   std::cin >> message;
   card::Binding_Card* holder = NULL;
 
   if (general::str2num(message, _identifier)) {
@@ -196,6 +199,7 @@ void Interface::Add() {
     campusCard.SetDepartment(department);
     campusCard.SetBalance(balance);
     cardCore->AddCampusCard(campusCard);
+    logCore->NewCard(campusCard);
   }
   if (option == 2 || option == 3) {
     std::cout << "Deposit_Card" << std::endl;
@@ -209,6 +213,7 @@ void Interface::Add() {
     depositCard.SetBalance(balance);
     depositCard.SetOverdraft(overdraft);
     cardCore->AddDepositCard(depositCard);
+    logCore->NewCard(depositCard);
   }
   if (option == 3) {
     cardCore->BindingCard(campusCard, depositCard);
@@ -413,16 +418,28 @@ void Interface::Delete() {
       std::cin >> message;
     }
     switch (option) {
-      case 1:
+      case 1: {
+        card::Campus_Card temp = *cardCore->FindCard(selected->GetIdentifier());
+        logCore->DeleteCard(temp);
+        temp = *cardCore->FindCard(selected->GetIdentifier());
+        logCore->DeleteCard(temp);
         cardCore->DeleteCard(selected->GetIdentifier());
-        return;
+        exitFlag = true;
         break;
-      case 2:
+      }
+      case 2: {
+        card::Campus_Card temp = *cardCore->FindCard(selected->GetIdentifier());
+        logCore->DeleteCard(temp);
         cardCore->DeleteCampusCard(selected->GetIdentifier());
         break;
-      case 3:
+      }
+      case 3: {
+        card::Deposit_Card temp =
+            *cardCore->FindCard(selected->GetIdentifier());
+        logCore->DeleteCard(temp);
         cardCore->DeleteDepositCard(selected->GetIdentifier());
         break;
+      }
       case 4:
         ChooseAccount();
         break;

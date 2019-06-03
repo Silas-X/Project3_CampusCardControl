@@ -6,12 +6,13 @@
  *
  *
  */
+
 #ifndef GENERAL_FUN_H_
 #define GENERAL_FUN_H_
 
+#include <ctime>
 #include <sstream>
 #include <string>
-
 namespace general {
 template <class T>
 bool str2num(std::string str, T &num) {
@@ -53,6 +54,9 @@ std::string num2str(T num) {
   ss >> str;
   return str;
 }
+
+char *GetCurrentTime();
+void Pause();
 };  // namespace general
 
 #endif

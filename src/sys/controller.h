@@ -45,7 +45,7 @@ class card_storage {
     if (it == storage.end()) return false;
     return it->second->SetCampusStatus(false);
   }
-bool DeleteDepositCard(int _identifier) {
+  bool DeleteDepositCard(int _identifier) {
     std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
     if (it == storage.end()) return false;
     return it->second->SetDepositStatus(false);

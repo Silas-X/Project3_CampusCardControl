@@ -12,10 +12,10 @@ Deposit_Card::~Deposit_Card() { overdraft = -1; }
 // accessor
 MoneyType Deposit_Card::GetOverdraft() const { return overdraft; }
 std::string Deposit_Card::GetCardCode() const { return cardCode; }
-
+std::string Deposit_Card::GetCardType() const { return "Deposit Card"; }
 std::string Deposit_Card::GetInfo() const {
   std::string InfoStr = "";
-  InfoStr += "Card Type: Deposit Card";
+  InfoStr += "\nCard Type:\t" + GetCardType();
   InfoStr += "\nHolder's Information:";
   InfoStr += "\n\tName:\t" + GetName();
   InfoStr += "\n\tSerial Number:\t" + GetCardCode();
@@ -29,6 +29,13 @@ std::string Deposit_Card::GetInfo() const {
 }
 
 // mutator
+void Deposit_Card::Copy(const Deposit_Card &origin) {
+  this->SetName(origin.GetName());
+  this->SetPasswd(origin.GetPassword());
+  this->SetCardCode(origin.GetCardCode());
+  this->SetBalance(origin.GetBalance());
+  this->SetOverdraft(origin.GetOverdraft());
+}
 bool Deposit_Card::SetOverdraft(MoneyType amount = DEFAULT_OVERDRAFT_LIMIT) {
   if (amount < 0) return false;  //设定透支额度
   this->overdraft = amount;

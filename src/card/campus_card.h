@@ -16,6 +16,7 @@ class Campus_Card : public Card {
   ~Campus_Card();
 
   // accessor
+  std::string GetCardType() const;
   std::string GetStudentId() const;
   std::string GetDepartment() const;
 

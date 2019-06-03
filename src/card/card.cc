@@ -15,7 +15,6 @@ int Card::GetIdentifier() const { return identifier; }
 std::string Card::GetName() const { return userName; }
 std::string Card::GetPassword() const { return passwd; }
 MoneyType Card::GetBalance() const { return balance; }
-Date Card::GetIssueDate() const { return issueDate; }
 
 // mutator
 void Card::SetIdentifier(int _identifier) { identifier = _identifier; }

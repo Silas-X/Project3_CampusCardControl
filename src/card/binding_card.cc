@@ -20,7 +20,6 @@ Binding_Card::Binding_Card(const Campus_Card &campusCard,
       depositExist{true} {}
 // accessor
 int Binding_Card::GetIdentifier() const { return Campus_Card::GetIdentifier(); }
-
 std::string Binding_Card::GetInfo() const {
   std::string res;
   res = "Identifier:\t " + general::num2str(GetIdentifier());
@@ -32,6 +31,7 @@ std::string Binding_Card::GetInfo() const {
   res += IsBinding() ? "\nBINDED" : "\nNOT BINDED";
   return res;
 }
+
 
 bool Binding_Card::IsCampusCard() const { return campusExist; }
 bool Binding_Card::IsDepositCard() const { return depositExist; }

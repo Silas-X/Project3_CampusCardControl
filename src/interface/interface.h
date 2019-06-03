@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "../sys/controller.h"
+#include "log_it.h"
 namespace ui {
 
 class Interface {
@@ -21,6 +22,7 @@ class Interface {
  private:
   int opt;
   std::vector<card::Binding_Card*> foundedList;
+  logit::LogIt* logCore;
   card::Binding_Card* selected;
   // std::vector<std::map<int, card::Binding_Card*>::iterator> foundedList;
   // std::map<int, card::Binding_Card*>::iterator selected;
@@ -28,12 +30,13 @@ class Interface {
     void (Interface::*MenuInfo)();
     Menus (Interface::*MenuAction)(std::string message);
   };
-  Interface(cardSystem::card_storage* _cardCore);
+  Interface(cardSystem::card_storage* _cardCorem, logit::LogIt* _logCore);
   static Interface* userInterface;
   cardSystem::card_storage* cardCore;
 
  public:
-  static Interface* InitInterface(cardSystem::card_storage* _cardCore);
+  static Interface* InitInterface(cardSystem::card_storage* _cardCore,
+                                  logit::LogIt* _logCore);
   bool Dispatch();
   ~Interface();
 
