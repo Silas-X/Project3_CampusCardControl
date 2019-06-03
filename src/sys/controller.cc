@@ -38,8 +38,8 @@ void card_storage::PrintAll(std::string ctrl) {
             << "\tName" << std::endl;
   while (it != storage.end()) {
     if (ctrl == "OneLine") {
-      std::cout << it->second->Campus_Card::GetIdentifier() << "\t\t\t"
-                << it->second->Campus_Card::GetName() << std::endl;
+      std::cout << it->second->GetIdentifier() << "\t\t\t"
+                << it->second->GetName() << std::endl;
     }
     it++;
   }
@@ -50,6 +50,7 @@ std::vector<std::string> card_storage::GetAllIdentifier() {
   std::map<int, card::Binding_Card*>::iterator it = storage.begin();
   while (it != storage.end()) {
     identifierList.push_back(general::num2str(it->second->GetIdentifier()));
+    it++;
   }
   return identifierList;
 }

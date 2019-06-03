@@ -146,8 +146,8 @@ void Interface::LookUp() {
   std::cout << "请输入查询/修改用户名或标识符" << std::endl;
   std::string message;
   int _identifier;
-  //getline(std::cin, message);
-   std::cin >> message;
+  // getline(std::cin, message);
+  std::cin >> message;
   card::Binding_Card* holder = NULL;
 
   if (general::str2num(message, _identifier)) {
@@ -187,7 +187,7 @@ void Interface::Add() {
   ui::ReadInName(std::cin, name);
   ui::ReadInPasswd(std::cin, passwd);
 
-  if (option == 1 || option == 3) {
+  if (option == 2 || option == 3) {
     std::cout << "Campus_Card" << std::endl;
     ui::ReadInStudentId(std::cin, studentId);
     ui::ReadInDepartment(std::cin, department);
@@ -201,7 +201,7 @@ void Interface::Add() {
     cardCore->AddCampusCard(campusCard);
     logCore->NewCard(campusCard);
   }
-  if (option == 2 || option == 3) {
+  if (option == 1 || option == 3) {
     std::cout << "Deposit_Card" << std::endl;
     ui::ReadInCardCode(std::cin, cardCode);
     ui::ReadInOverdraft(std::cin, overdraft);

@@ -25,11 +25,23 @@ using general::str2num;
 typedef int MoneyType;
 enum ErrorType { INVALID_AMOUNT };
 enum CardType { CAMPUS_CARD, DEPOSIT_CARD, ALL_CARD };
-
-class Card {
+class Card_Base {
  protected:
   int identifier;
   std::string userName;
+
+ public:
+  Card_Base(int _identifier, std::string _username);
+  int GetIdentifier() const;
+  std::string GetName() const;
+  void SetIdentifier(int _identifier);
+  void SetName(std::string _name);
+};
+
+class Card : virtual public  Card_Base {
+ protected:
+  // int identifier;
+  // std::string userName;
   std::string passwd;
   MoneyType balance;
   // TODO::增加卡片状态(激活，冻结，注销)
@@ -40,16 +52,16 @@ class Card {
   ~Card();
 
   // accessors
-  virtual std::string GetCardType() const=0;
-  int GetIdentifier() const;
-  std::string GetName() const;
+  virtual std::string GetCardType() const = 0;
+//  int GetIdentifier() const;
+  //std::string GetName() const;
   std::string GetPassword() const;
   MoneyType GetBalance() const;
   virtual std::string GetInfo() const = 0;
 
   // mutator
-  void SetIdentifier(int _identifier);
-  void SetName(std::string _name);
+  //void SetIdentifier(int _identifier);
+  //void SetName(std::string _name);
   void SetPasswd(std::string _passwd);
   void SetBalance(MoneyType amount);
   virtual bool Deposit(MoneyType amount) = 0;

@@ -1,9 +1,9 @@
-#define DEBUG_
+//#define DEBUG_
 #include "data_base.h"
 #include <vector>
 #include "../general/generalFun.h"
 #ifdef DEBUG_
-#include<iostream>
+#include <iostream>
 #endif
 namespace fileSystem {
 Data_Base* Data_Base::fileCore = NULL;
@@ -20,6 +20,8 @@ std::string Data_Base::GetRootAddr() const { return rootAddr; }
 void Data_Base::SetRootAddr(std::string addr) { rootAddr = addr; }
 
 bool Data_Base::WriteOutData() {
+  std::string command = "rm -rf " + rootAddr;
+  system(command.c_str());
   WriteOutIndex(rootAddr);
   WriteOutAllUserInfo();
 }
@@ -33,9 +35,6 @@ bool Data_Base::WriteOutIndex(std::string rootAddr) {
   std::vector<std::string>::iterator it = userAddrList.begin();
   while (it != userAddrList.end()) {
     out << *it << std::endl;
-    #ifdef DEBUG_
-    std::cout << *it << std::endl;
-    #endif
     it++;
   }
   out.close();
@@ -59,6 +58,7 @@ bool Data_Base::WriteOutUserInfo(std::string _userAddr,
   general::mkdir(userAddr);
   temp = userAddr + "/CampusCard.txt";
   out.open(temp, std::fstream::out);
+  out << current->IsCampusCard() << std::endl;
   out << current->GetIdentifier() << std::endl;
   out << current->Campus_Card::GetName() << std::endl;
   out << current->Campus_Card::GetPassword() << std::endl;
@@ -68,12 +68,17 @@ bool Data_Base::WriteOutUserInfo(std::string _userAddr,
   out.close();
   temp = userAddr + "/DepositCard.txt";
   out.open(temp, std::fstream::out);
+  out << current->IsDepositCard() << std::endl;
   out << current->GetIdentifier() << std::endl;
   out << current->Deposit_Card::GetName() << std::endl;
   out << current->Deposit_Card::GetPassword() << std::endl;
   out << current->Deposit_Card::GetCardCode() << std::endl;
   out << current->Deposit_Card::GetBalance() << std::endl;
   out << current->Deposit_Card::GetOverdraft() << std::endl;
+  out.close();
+  temp = userAddr + "/Binding.txt";
+  out.open(temp, std::fstream::out);
+  out << current->IsBinding() << std::endl;
   out.close();
 }
 
