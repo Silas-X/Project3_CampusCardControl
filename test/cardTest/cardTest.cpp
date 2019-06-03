@@ -31,6 +31,7 @@ int main() {
 
   card::MoneyType amount;
   cardSystem::card_storage *system = cardSystem::card_storage::init();
+  logit::LogIt *logCore = logit::LogIt::Init();
 #ifdef TEST_CAMPUS_CARD
   std::cin >> name;
   std::cin >> password;
@@ -128,7 +129,7 @@ int main() {
 #endif
 
 #ifdef TEST_MENU
-  ui::Interface *userWindow = ui::Interface::InitInterface(system);
+  ui::Interface *userWindow = ui::Interface::InitInterface(system,logCore);
   userWindow->SetOpt(ui::Interface::MAIN_MENU);
   userWindow->Dispatch();
 #endif

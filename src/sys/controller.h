@@ -39,6 +39,17 @@ class card_storage {
 #endif
   void PrintAll(std::string ctrl = "OneLine");
   // mutator
+  bool DeleteCard(int _identifier) { storage.erase(_identifier); }
+  bool DeleteCampusCard(int _identifier) {
+    std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+    if (it == storage.end()) return false;
+    return it->second->SetCampusStatus(false);
+  }
+  bool DeleteDepositCard(int _identifier) {
+    std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+    if (it == storage.end()) return false;
+    return it->second->SetDepositStatus(false);
+  }
   bool AddCampusCard(card::Campus_Card& compusCard);
   bool AddDepositCard(card::Deposit_Card& compusCard);
 

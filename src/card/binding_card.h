@@ -30,7 +30,8 @@ class Binding_Card : public Campus_Card, public Deposit_Card {
   bool AddCampusCard(Campus_Card* campusCard);
   bool AddDepositCard(Deposit_Card* depositCard);
   bool SetBindingCards();
-
+  bool SetCampusStatus(bool status = false);
+  bool SetDepositStatus(bool status = false);
   // Account Operations
   bool Deposit(MoneyType amount, CardType targetCard = DEPOSIT_CARD);
   bool Withdraw(MoneyType amount, CardType targetCard = ALL_CARD);

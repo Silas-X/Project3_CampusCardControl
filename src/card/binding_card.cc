@@ -20,7 +20,6 @@ Binding_Card::Binding_Card(const Campus_Card &campusCard,
       depositExist{true} {}
 // accessor
 int Binding_Card::GetIdentifier() const { return Campus_Card::GetIdentifier(); }
-
 std::string Binding_Card::GetInfo() const {
   std::string res;
   res = "Identifier:\t " + general::num2str(GetIdentifier());
@@ -32,6 +31,7 @@ std::string Binding_Card::GetInfo() const {
   res += IsBinding() ? "\nBINDED" : "\nNOT BINDED";
   return res;
 }
+
 
 bool Binding_Card::IsCampusCard() const { return campusExist; }
 bool Binding_Card::IsDepositCard() const { return depositExist; }
@@ -69,7 +69,14 @@ bool Binding_Card::SetBindingCards() {
   this->binding = (campusExist & depositExist);
   return this->binding;
 }
-
+bool Binding_Card::SetCampusStatus(bool status) {
+  this->campusExist = status;
+  return true;
+}
+bool Binding_Card::SetDepositStatus(bool status) {
+  this->depositExist = status;
+  return true;
+}
 // Account Operations
 bool Binding_Card::Deposit(MoneyType amount, CardType targetCard) {
   if (targetCard == CAMPUS_CARD) return this->Campus_Card::Deposit(amount);
