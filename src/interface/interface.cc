@@ -319,6 +319,10 @@ void Interface::ModifyBasic() {
 }
 
 void Interface::ModifyCampus() {
+  if (!selected->IsCampusCard())
+  {
+    std::cout<<"Campus Card Not Exist"<<std::endl;
+  }
   bool exitFlag = false;
   while (!exitFlag) {
     system("reset");
