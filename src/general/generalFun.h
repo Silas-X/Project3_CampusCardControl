@@ -57,7 +57,8 @@ std::string num2str(T num) {
 
 char *GetCurrentTime();
 void Pause();
-void mkdir(std::string addr);
+void mkdir(std::string addr,std::string rootAddr="");
+std::string FormAddr(std::string rootAddr,std::string dir="",std::string fileName="");
 };  // namespace general
 
 #endif

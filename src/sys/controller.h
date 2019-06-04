@@ -62,7 +62,7 @@ class card_storage {
 
   // bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
 
-  card::Binding_Card* FindCard(int _identifier) const;
+  card::Binding_Card* FindCard(int _identifier) ;
   std::vector<card::Binding_Card*> FindCard(std::string _name);
   // Account operations
   bool Deposit(card::MoneyType amount, card::Binding_Card& current,

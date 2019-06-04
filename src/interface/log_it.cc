@@ -7,22 +7,35 @@
 #include "../general/generalFun.h"
 namespace logit {
 LogIt* LogIt::logCore = NULL;
-LogIt* LogIt::Init() {
+LogIt* LogIt::Init(std::string rootAddr) {
   if (logCore == NULL) {
-    logCore = new LogIt();
+    logCore = new LogIt(rootAddr);
   }
   return logCore;
 }
-LogIt::LogIt() : logFile{"logfile.log"} {
-  log.open(logFile, std::fstream::app);
+LogIt::LogIt(std::string _rootAddr) : rootAddr{_rootAddr} {
+  log.close();
 }
+
 bool LogIt::IsSuccess() const {
   if (log.is_open()) return true;
   std::cout << "文件打开失败" << std::endl;
   return false;
 }
+
+bool LogIt::OpenTest(std::ofstream& out, std::string addr,
+                     std::ios_base::openmode mode) {
+  out.close();
+  out.open(addr, mode);
+  if (out.is_open()) return true;
+  std::cout << "文件打开失败" << std::endl;
+  return false;
+}
+
 bool LogIt::NewCard(const card::Card& current) {
-  if (!IsSuccess()) return false;
+  general::mkdir(rootAddr);
+  std::string fileAddr = general::FormAddr(rootAddr, "", "systemLog.log");
+  if (!OpenTest(log, fileAddr)) return false;
   log << general::GetCurrentTime() << "\t"
       << "[创建卡]\t"
       << "[卡类型]:\t" << current.GetCardType() << "\t"
@@ -31,7 +44,9 @@ bool LogIt::NewCard(const card::Card& current) {
   return true;
 }
 bool LogIt::DeleteCard(const card::Card& current) {
-  if (!IsSuccess()) return false;
+  general::mkdir(rootAddr);
+  std::string fileAddr = general::FormAddr(rootAddr, "", "systemLog.log");
+  if (!OpenTest(log, fileAddr)) return false;
   log << general::GetCurrentTime() << "\t"
       << "[删除卡]\t"
       << "[卡类型]:\t" << current.GetCardType() << "\t"
@@ -41,7 +56,11 @@ bool LogIt::DeleteCard(const card::Card& current) {
 }
 bool LogIt::InnerAccount(const card::Card& current, std::string operation,
                          card::MoneyType amount) {
-  if (!IsSuccess()) return false;
+  std::string dirName = general::num2str(current.GetIdentifier());
+  general::mkdir(dirName,rootAddr);
+  std::string fileName = dirName + ".log";
+  std::string fileAddr = general::FormAddr(rootAddr, dirName, fileName);
+  if (!OpenTest(log, fileAddr)) return false;
   log << general::GetCurrentTime() << "\t"
       << "[账户操作]\t"
       << "[卡类型]:\t" << current.GetCardType() << "\t"
@@ -52,7 +71,11 @@ bool LogIt::InnerAccount(const card::Card& current, std::string operation,
 }
 bool LogIt::ExternalAccount(const card::Card& src, const card::Card& dest,
                             std::string operation, card::MoneyType amount) {
-  if (!IsSuccess()) return false;
+  std::string dirName = general::num2str(src.GetIdentifier());
+  std::string fileName = dirName + ".log";
+  std::string fileAddr = general::FormAddr(rootAddr, dirName, fileName);
+  general::mkdir(dirName,rootAddr);
+  if (!OpenTest(log, fileAddr)) return false;
   log << general::GetCurrentTime() << "\t"
       << "[账户操作]\t"
       << "[卡类型]:\t" << src.GetCardType() << "\t"

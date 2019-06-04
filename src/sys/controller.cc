@@ -97,7 +97,9 @@ bool card_storage::BindingCard(int _identifier) {
   return FindCard(card1.GetIdentifier())->SetBindingCards();
 }
 */
-card::Binding_Card* card_storage::FindCard(int _identifier) const {
+card::Binding_Card* card_storage::FindCard(int _identifier) {
+  std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+  if (it==storage.end()) return NULL;
   return storage.find(_identifier)->second;
 }
 std::vector<card::Binding_Card*> card_storage::FindCard(std::string _name) {
@@ -133,6 +135,7 @@ bool card_storage::ExternalTransfer(card::MoneyType amount,
                                     card::CardType destType) {
   if (amount < 0) return false;
   if (src == dest) return false;
+  if (src == NULL || dest == NULL) return false;
   if (!src->Withdraw(amount, srcType)) return false;
   if (!dest->Deposit(amount, destType)) {
     src->Deposit(amount, srcType);
