@@ -130,11 +130,12 @@ int main() {
 #endif
 
 #ifdef TEST_MENU
+  fileSystem::Data_Base *fileCore =
+      fileSystem::Data_Base::Init(system, logCore);
+  fileCore->ReadInAllData();
   ui::Interface *userWindow = ui::Interface::InitInterface(system, logCore);
   userWindow->SetOpt(ui::Interface::MAIN_MENU);
   userWindow->Dispatch();
-  fileSystem::Data_Base *fileCore =
-      fileSystem::Data_Base::Init(system, logCore);
   fileCore->WriteOutData();
 #endif
   return 0;

@@ -32,8 +32,9 @@ class Data_Base {
   bool WriteOutIndex(std::string rootAddr);
   bool WriteOutUserInfo(std::string userAddr, card::Binding_Card* current);
   bool WriteOutAllUserInfo();
+  bool ReadInAllData();
   bool ReadInIndex();
-  bool ReadInUserInfo();
+  bool ReadInUserData(std::string _userAdd);
 };
 }  // namespace fileSystem
 

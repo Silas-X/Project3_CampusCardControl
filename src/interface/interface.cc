@@ -219,6 +219,7 @@ void Interface::Add() {
     cardCore->BindingCard(campusCard, depositCard);
   }
 }
+
 bool Interface::ChooseAccount() {
   std::cout << "[1] 显示全部账户" << std::endl;
   std::cout << "[2] 选择修改账户" << std::endl;
