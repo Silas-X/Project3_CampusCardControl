@@ -9,7 +9,7 @@
 #include "log_it.h"
 
 namespace fileSystem {
-const std::string DEFAULT_ROOT_INDEX = "./DataFiles/";
+const std::string DEFAULT_ROOT_INDEX = "./DataFiles";
 class Data_Base {
  private:
   std::ifstream inputFile;
