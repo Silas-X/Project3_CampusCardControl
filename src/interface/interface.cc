@@ -6,7 +6,7 @@ namespace ui {
 Interface* Interface::userInterface = NULL;
 Interface::Interface(cardSystem::card_storage* _cardCore,
                      logit::LogIt* _logCore)
-    : cardCore{_cardCore}, logCore{_logCore} {}
+    : cardCore{_cardCore}, logCore{_logCore}, selected{NULL} {}
 Interface* Interface::InitInterface(cardSystem::card_storage* _cardCore,
                                     logit::LogIt* _logCore) {
   if (userInterface == NULL) userInterface = new Interface{_cardCore, _logCore};
@@ -130,6 +130,7 @@ void Interface::AccountMainMenuInfo() {
   std::cout << "请选择所需的服务" << std::endl;
   std::cout << "[1]\t 校园卡业务" << std::endl;
   std::cout << "[2]\t 储蓄卡业务" << std::endl;
+  std::cout << "[3]\t 更换账户" << std::endl;
   std::cout << "[0]\t 返回上级菜单" << std::endl;
 }
 
@@ -148,11 +149,19 @@ Interface::Menus Interface::AccountMainMenu(std::string message) {
     case 2:
       DepositAccount();
       break;
+    case 3:
+      selected = NULL;
+      break;
   }
   return ACCOUNT_MENU;
 }
 
 void Interface::CampusAccount() {
+  if (!selected->IsCampusCard()) {
+    std::cout << "不存在" << std::endl;
+    general::Pause();
+    return;
+  }
   std::cout << "请选择所需的服务" << std::endl;
   std::cout << "[1]\t 存款" << std::endl;
   std::cout << "[2]\t 取款" << std::endl;
@@ -168,18 +177,51 @@ void Interface::CampusAccount() {
   card::MoneyType amount;
   switch (option) {
     case 1:
-      std::cin >> amount;
-      cardCore->Deposit(amount, *selected, card::CAMPUS_CARD);
+      std::cout << "请输入金额" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+
+      if (!cardCore->Deposit(amount, *selected, card::CAMPUS_CARD))
+        std::cout << "操作失败" << std::endl;
+      {
+        std::cout << "操作成功" << std::endl;
+        logCore->InnerAccount(card::Campus_Card{*selected}, "存款", amount);
+      }
       break;
 
     case 2:
-      std::cin >> amount;
-      cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD);
+      std::cout << "请输入金额" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+
+      if (!cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD))
+        std::cout << "操作失败" << std::endl;
+      {
+        std::cout << "操作成功" << std::endl;
+        logCore->InnerAccount(card::Campus_Card{*selected}, "取款", amount);
+      }
       break;
     case 3:
-      std::cin >> amount;
-      cardCore->InternalTransfer(amount, selected, card::DEPOSIT_CARD,
-                                 card::CAMPUS_CARD);
+      std::cout << "请输入金额" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+      if (!cardCore->InternalTransfer(amount, selected, card::DEPOSIT_CARD,
+                                      card::CAMPUS_CARD))
+        std::cout << "操作失败" << std::endl;
+      {
+        std::cout << "操作成功" << std::endl;
+        logCore->InnerAccount(card::Campus_Card{*selected}, "个人名下转账",
+                              amount);
+      }
       break;
     case 0:
       return;
@@ -187,6 +229,11 @@ void Interface::CampusAccount() {
 }
 
 void Interface::DepositAccount() {
+  if (!selected->IsDepositCard()) {
+    std::cout << "不存在" << std::endl;
+    general::Pause();
+    return;
+  }
   std::cout << "请选择所需的服务" << std::endl;
   std::cout << "[1]\t 存款" << std::endl;
   std::cout << "[2]\t 取款" << std::endl;
@@ -203,19 +250,61 @@ void Interface::DepositAccount() {
   int target_account;
   switch (option) {
     case 1:
-      std::cin >> amount;
-      cardCore->Deposit(amount, *selected, card::DEPOSIT_CARD);
+      std::cout << "请输入金额" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+      if (!cardCore->Deposit(amount, *selected, card::DEPOSIT_CARD))
+        std::cout << "操作失败" << std::endl;
+      else {
+        std::cout << "操作成功" << std::endl;
+        logCore->InnerAccount(card::Deposit_Card{*selected}, "存款", amount);
+      }
       break;
 
     case 2:
-      std::cin >> amount;
-      cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD);
+      std::cout << "请输入金额" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+      if (!cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD))
+        std::cout << "操作失败" << std::endl;
+      else {
+        std::cout << "操作成功" << std::endl;
+        logCore->InnerAccount(card::Deposit_Card{*selected}, "取款", amount);
+      }
+
       break;
     case 3:
-      std::cin >> amount;
-      std::cin >> target_account;
-      cardCore->ExternalTransfer(amount, selected,
-                                 cardCore->FindCard(target_account));
+      std::cout << "请输入金额" << std::endl;
+
+      std::cin >> message;
+      while (!general::str2num(message, amount)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      };
+
+      std::cout << "请输入目标账户" << std::endl;
+      std::cin >> message;
+      while (!general::str2num(message, target_account)) {
+        std::cout << "输入有误,请重试" << std::endl;
+        std::cin >> message;
+      }
+
+      if (!cardCore->ExternalTransfer(amount, selected,
+                                      cardCore->FindCard(target_account)))
+        std::cout << "转账失败,请确认输入" << std::endl;
+      else {
+        std::cout << "操作成功" << std::endl;
+        logCore->ExternalAccount(
+            card::Deposit_Card{*selected},
+            card::Deposit_Card{*(cardCore->FindCard(target_account))}, "转账",
+            amount);
+      }
       break;
     case 0:
       return;
@@ -227,9 +316,17 @@ void Interface::StatusBar() const {
   std::cout << "当前选择账户: ";
   if (selected == NULL)
     std::cout << "当前无选择账户" << std::endl;
-  else
+  else {
     std::cout << selected->GetIdentifier() << " " << selected->GetName()
               << std::endl;
+    if (selected->IsCampusCard())
+      std::cout << "校园卡余额\t" << selected->Campus_Card::GetBalance()
+                << std::endl;
+    if (selected->IsDepositCard())
+      std::cout << "储蓄卡余额\t" << selected->Deposit_Card::GetBalance()
+                << std::endl;
+  }
+
   std::cout << "===========================================" << std::endl;
 }
 
@@ -318,6 +415,7 @@ void Interface::AddDepositCard(int identifier, std::string name) {
   std::cout << "Deposit_Card" << std::endl;
   ui::ReadInCardCode(std::cin, cardCode);
   ui::ReadInOverdraft(std::cin, overdraft);
+  ui::ReadInPasswd(std::cin, passwd);
   ui::ReadInBalance(std::cin, balance);
 
   depositCard.SetIdentifier(identifier);
@@ -350,7 +448,7 @@ bool Interface::ChooseAccount() {
     LookUp();
     selected = (foundedList.empty()) ? NULL : *(foundedList.begin());
   }
-    return true;
+  return true;
 }
 void Interface::Modify() {
   bool exitFlag = false;
@@ -603,7 +701,7 @@ bool ReadInIdentifier(std::istream& in, int& num) {
   std::string message;
   in >> message;
   while (!general::str2num(message, num)) {
-    std::cout << "输入有误,请重试" << std::endl;
+    std::cout << "输入有误,请重试1" << std::endl;
     in >> message;
   }
   return true;
@@ -628,7 +726,7 @@ bool ReadInBalance(std::istream& in, card::MoneyType& num) {
   std::string message;
   in >> message;
   while (!general::str2num(message, num) || num < 0) {
-    std::cout << "输入有误,请重试" << std::endl;
+    std::cout << "输入有误,请重试2" << std::endl;
     in >> message;
   }
   return true;
@@ -639,7 +737,7 @@ bool ReadInOverdraft(std::istream& in, card::MoneyType& num) {
   std::string message;
   in >> message;
   while (!general::str2num(message, num)) {
-    std::cout << "输入有误,请重试" << std::endl;
+    std::cout << "输入有误,请重试3" << std::endl;
     in >> message;
   }
 }

@@ -21,7 +21,7 @@ bool LogIt::IsSuccess() const {
   std::cout << "文件打开失败" << std::endl;
   return false;
 }
-bool LogIt::NewCard(card::Card& current) {
+bool LogIt::NewCard(const card::Card& current) {
   if (!IsSuccess()) return false;
   log << general::GetCurrentTime() << "\t"
       << "[创建卡]\t"
@@ -30,7 +30,7 @@ bool LogIt::NewCard(card::Card& current) {
       << "[用户名]:\t" << current.GetName() << std::endl;
   return true;
 }
-bool LogIt::DeleteCard(card::Card& current) {
+bool LogIt::DeleteCard(const card::Card& current) {
   if (!IsSuccess()) return false;
   log << general::GetCurrentTime() << "\t"
       << "[删除卡]\t"
@@ -39,25 +39,29 @@ bool LogIt::DeleteCard(card::Card& current) {
       << "[用户名]:\t" << current.GetName() << std::endl;
   return true;
 }
-bool LogIt::InnerAccount(card::Card& current, std::string operation,
+bool LogIt::InnerAccount(const card::Card& current, std::string operation,
                          card::MoneyType amount) {
   if (!IsSuccess()) return false;
   log << general::GetCurrentTime() << "\t"
       << "[账户操作]\t"
       << "[卡类型]:\t" << current.GetCardType() << "\t"
-      << "[标识符]:\t" << current.GetIdentifier() << "\t" << operation << "\t"
+      << "[标识符]:\t" << current.GetIdentifier() << "\t"
+      << "[用户名]:\t" << current.GetName() << "\t" << operation << "\t"
       << "[金额]\t" << amount << std::endl;
   return true;
 }
-bool LogIt::ExternalAccount(card::Card& src, card::Card& dest,
+bool LogIt::ExternalAccount(const card::Card& src, const card::Card& dest,
                             std::string operation, card::MoneyType amount) {
   if (!IsSuccess()) return false;
   log << general::GetCurrentTime() << "\t"
       << "[账户操作]\t"
       << "[卡类型]:\t" << src.GetCardType() << "\t"
-      << "[标识符]:\t" << src.GetIdentifier() << "\t" << operation << "\t"
+      << "[标识符]:\t" << src.GetIdentifier() << "\t"
+      << "[用户名]:\t" << src.GetName() << "\t" << operation << "\t"
       << "[金额]\t" << amount << "到\t"
-      << "[标识符]:\t" << dest.GetIdentifier() << "\t" << std::endl;
+      << "[标识符]:\t" << dest.GetIdentifier() << "[用户名]:\t"
+      << dest.GetName() << "\t"
+      << "\t" << std::endl;
   return true;
 }
 

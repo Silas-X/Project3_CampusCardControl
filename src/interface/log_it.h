@@ -32,13 +32,12 @@ class LogIt {
   ~LogIt();
   void PrintTime();
   bool IsSuccess() const;
-  bool NewCard(card::Card& current);
-  bool DeleteCard(card::Card& current);
-
-  bool InnerAccount(card::Card& current, std::string operation,
+  bool NewCard(const card::Card& current);
+  bool DeleteCard(const card::Card& current);
+  bool InnerAccount(const card::Card& current, std::string operation,
                     card::MoneyType amount = 0);
-  bool ExternalAccount(card::Card& src, card::Card& dest, std::string operation,
-                       card::MoneyType amount);
+  bool ExternalAccount(const card::Card& src, const card::Card& dest,
+                       std::string operation, card::MoneyType amount);
 };
 }  // namespace logit
 #endif
