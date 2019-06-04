@@ -1,4 +1,4 @@
-//#define DEBUG_
+#define DEBUG_
 //#define TEST_CAMPUS_CARD
 //#define TEST_DEPOSIT_CARD
 //#define TEST_BINDING_CARD
@@ -10,7 +10,10 @@
 #include "../../src/card/card.cc"
 #include "../../src/card/deposit_card.cc"
 #include "../../src/interface/interface.cc"
+#include "../../src/interface/data_base.cc"
+#include"../../src/interface/log_it.cc"
 #include "../../src/sys/controller.cc"
+#include"../../src/general/generalFun.cc"
 #endif
 
 #include <iostream>
@@ -20,7 +23,9 @@
 #include "../../src/card/deposit_card.h"
 #include "../../src/interface/data_base.h"
 #include "../../src/interface/interface.h"
+#include"../../src/interface/log_it.h"
 #include "../../src/sys/controller.h"
+#include"../../src/general/generalFun.h"
 
 int main() {
   std::string name;

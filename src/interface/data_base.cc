@@ -148,7 +148,7 @@ bool Data_Base::ReadInUserData(std::string _userAddr) {
     campusCard.SetBalance(balance);
     cardCore->AddCampusCard(campusCard);
   }
-
+in.close();
   temp = userAddr + "/DepositCard.txt";
   in.open(temp, std::ifstream::in);
   if (!in.is_open()) {
