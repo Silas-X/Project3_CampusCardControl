@@ -16,6 +16,7 @@ class Interface {
     HOLDER_MENU,
     CAMPUS_MENU,
     DEPOSIT_MENU,
+    ACCOUNT_MENU,
     STATUS_BAR
   };
 
@@ -51,16 +52,18 @@ class Interface {
   Menus MainMenu(std::string message);
   void HolderMenuInfo();  // HOLDER_MENU
   Menus HolderMenu(std::string message);
-  void CampusMenuInfo();  // CAMPUS_MENU
-  Menus CampusMenu(std::string message);
-  void DepositMenuInfo();  // DEPOSIT_MENU
-  Menus DepositMenu(std::string message);
-
+  void AccountMainMenuInfo();
+  Menus AccountMainMenu(std::string message);
+  void CampusAccount();
+  void DepositAccount();
   void StatusBar() const;
 
   // API
   void LookUp();
   void Add();
+  void AddCampusCard(int identifier, std::string name);
+  void AddDepositCard(int identifier, std::string name);
+
   bool ChooseAccount();
   void Modify();
   void ModifyBasic();
@@ -68,6 +71,8 @@ class Interface {
   void ModifyDeposit();
   void Delete();
   void Print(std::vector<card::Binding_Card*> list);
+
+  // account operation
 };
 bool ReadInIdentifier(std::istream& in, int& num);
 bool ReadInName(std::istream& in, std::string& str);

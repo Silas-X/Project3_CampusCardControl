@@ -84,20 +84,18 @@ bool Data_Base::WriteOutUserInfo(std::string _userAddr,
 }
 bool Data_Base::ReadInAllData() {
   if (!ReadInIndex()) return false;
-  std::vector<std::string>::iterator it=userAddrList.begin();
-  while(it!=userAddrList.end())
-  {
+  std::vector<std::string>::iterator it = userAddrList.begin();
+  while (it != userAddrList.end()) {
     ReadInUserData(*it);
     it++;
   }
-
 }
 bool Data_Base::ReadInIndex() {
   std::ifstream in;
   std::string temp = rootAddr + "/Index.txt";
   in.open(temp, std::ifstream::in);
   if (!in.is_open()) {
-    std::cout << "无法砸入数据文档" << std::endl;
+    std::cout << "无法载入数据文档" << std::endl;
     return false;
   }
   std::string identifier;
@@ -121,7 +119,6 @@ bool Data_Base::ReadInUserData(std::string _userAddr) {
   card::MoneyType overdraft;
   card::Campus_Card campusCard{};
   card::Deposit_Card depositCard{};
- // card::Binding_Card bindingCard{};
 
   std::ifstream in;
   std::string userAddr = rootAddr + "/" + _userAddr;
@@ -135,7 +132,7 @@ bool Data_Base::ReadInUserData(std::string _userAddr) {
   in >> campusCardFlag;
   if (campusCardFlag) {
     ui::ReadInIdentifier(in, identifier);
-    ui::ReadInName(in,name);
+    ui::ReadInName(in, name);
     ui::ReadInPasswd(in, passwd);
     ui::ReadInStudentId(in, studentId);
     ui::ReadInDepartment(in, department);
@@ -148,7 +145,7 @@ bool Data_Base::ReadInUserData(std::string _userAddr) {
     campusCard.SetBalance(balance);
     cardCore->AddCampusCard(campusCard);
   }
-in.close();
+  in.close();
   temp = userAddr + "/DepositCard.txt";
   in.open(temp, std::ifstream::in);
   if (!in.is_open()) {
@@ -158,7 +155,7 @@ in.close();
   in >> depositCardFlag;
   if (depositCardFlag) {
     ui::ReadInIdentifier(in, identifier);
-    ui::ReadInName(in,name);
+    ui::ReadInName(in, name);
     ui::ReadInPasswd(in, passwd);
     ui::ReadInCardCode(in, cardCode);
     ui::ReadInBalance(in, balance);
@@ -181,7 +178,7 @@ in.close();
   }
   bool isBinded;
   in >> isBinded;
-  if (isBinded) cardCore->BindingCard(campusCard, depositCard);
+  if (isBinded) cardCore->BindingCard(identifier);
   in.close();
 }
 

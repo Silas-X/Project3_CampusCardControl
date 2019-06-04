@@ -1,4 +1,5 @@
 #include "interface.h"
+#include <limits.h>
 #include <iostream>
 #include "log_it.h"
 namespace ui {
@@ -32,13 +33,9 @@ bool Interface::Dispatch() {
         runMenu.MenuInfo = &Interface::HolderMenuInfo;
         runMenu.MenuAction = &Interface::HolderMenu;
         break;
-      case CAMPUS_MENU:
-        runMenu.MenuInfo = &Interface::CampusMenuInfo;
-        runMenu.MenuAction = &Interface::CampusMenu;
-        break;
-      case DEPOSIT_MENU:
-        runMenu.MenuInfo = &Interface::DepositMenuInfo;
-        runMenu.MenuAction = &Interface::DepositMenu;
+      case ACCOUNT_MENU:
+        runMenu.MenuInfo = &Interface::AccountMainMenuInfo;
+        runMenu.MenuAction = &Interface::AccountMainMenu;
         break;
     }
     if (exitFlag) break;
@@ -59,8 +56,7 @@ Interface::Menus Interface::Guard(MenuType& currentMenu) {
 void Interface::MainMenuInfo() {
   std::cout << "   请选择所需的服务" << std::endl;
   std::cout << "[1]\t 管理全部持卡人信息" << std::endl;
-  std::cout << "[2]\t 管理校园卡信息" << std::endl;
-  std::cout << "[3]\t 管理储蓄卡信息" << std::endl;
+  std::cout << "[2]\t 管理个人账户" << std::endl;
   std::cout << "[0]\t 退出" << std::endl;
   std::cout << std::endl;
 }
@@ -76,9 +72,7 @@ Interface::Menus Interface::MainMenu(std::string message) {
     case 1:
       return HOLDER_MENU;
     case 2:
-      return CAMPUS_MENU;
-    case 3:
-      return DEPOSIT_MENU;
+      return ACCOUNT_MENU;
     case 0:
       return EXIT;
   }
@@ -87,11 +81,11 @@ Interface::Menus Interface::MainMenu(std::string message) {
 
 void Interface::HolderMenuInfo() {
   std::cout << "请选择所需的服务" << std::endl;
-  std::cout << "[1]\t 显示全部持卡人信息" << std::endl;
-  std::cout << "[2]\t 查询持卡人信息" << std::endl;
-  std::cout << "[3]\t 添加持卡人信息" << std::endl;
-  std::cout << "[4]\t 修改持卡人信息" << std::endl;
-  std::cout << "[5]\t 注销持卡人信息" << std::endl;
+  std::cout << "[1]\t 显示 全部持卡人信息" << std::endl;
+  std::cout << "[2]\t 查询/选择 持卡人信息" << std::endl;
+  std::cout << "[3]\t 添加 持卡人信息" << std::endl;
+  std::cout << "[4]\t 修改 持卡人信息" << std::endl;
+  std::cout << "[5]\t 注销 持卡人信息" << std::endl;
   std::cout << "[0]\t 返回上级菜单" << std::endl;
 }
 
@@ -128,22 +122,120 @@ Interface::Menus Interface::HolderMenu(std::string message) {
   }
   return HOLDER_MENU;
 }
-void Interface::CampusMenuInfo() {}
-Interface::Menus Interface::CampusMenu(std::string message) {
-  return MAIN_MENU;
+
+void Interface::AccountMainMenuInfo() {
+  while (selected == NULL) {
+    if (!ChooseAccount()) return;
+  }
+  std::cout << "请选择所需的服务" << std::endl;
+  std::cout << "[1]\t 校园卡业务" << std::endl;
+  std::cout << "[2]\t 储蓄卡业务" << std::endl;
+  std::cout << "[0]\t 返回上级菜单" << std::endl;
 }
-void Interface::DepositMenuInfo() {}
-Interface::Menus Interface::DepositMenu(std::string message) {
-  return MAIN_MENU;
+
+Interface::Menus Interface::AccountMainMenu(std::string message) {
+  int option;
+  if (!general::str2num(message, option) || option > 2 || option < 0) {
+    std::cout << "无效输入" << std::endl;
+    return MAIN_MENU;
+  }
+  switch (option) {
+    case 0:
+      return MAIN_MENU;
+    case 1:
+      CampusAccount();
+      break;
+    case 2:
+      DepositAccount();
+      break;
+  }
+  return ACCOUNT_MENU;
+}
+
+void Interface::CampusAccount() {
+  std::cout << "请选择所需的服务" << std::endl;
+  std::cout << "[1]\t 存款" << std::endl;
+  std::cout << "[2]\t 取款" << std::endl;
+  std::cout << "[3]\t 绑定账户转入" << std::endl;
+  std::cout << "[0]\t 返回上级菜单" << std::endl;
+  std::string message;
+  std::cin >> message;
+  int option;
+  while (!general::str2num(message, option)) {
+    std::cout << "输入有误,请重试" << std::endl;
+    std::cin >> message;
+  }
+  card::MoneyType amount;
+  switch (option) {
+    case 1:
+      std::cin >> amount;
+      cardCore->Deposit(amount, *selected, card::CAMPUS_CARD);
+      break;
+
+    case 2:
+      std::cin >> amount;
+      cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD);
+      break;
+    case 3:
+      std::cin >> amount;
+      cardCore->InternalTransfer(amount, selected, card::DEPOSIT_CARD,
+                                 card::CAMPUS_CARD);
+      break;
+    case 0:
+      return;
+  }
+}
+
+void Interface::DepositAccount() {
+  std::cout << "请选择所需的服务" << std::endl;
+  std::cout << "[1]\t 存款" << std::endl;
+  std::cout << "[2]\t 取款" << std::endl;
+  std::cout << "[3]\t 转账" << std::endl;
+  std::cout << "[0]\t 返回上级菜单" << std::endl;
+  std::string message;
+  std::cin >> message;
+  int option;
+  while (!general::str2num(message, option)) {
+    std::cout << "输入有误,请重试" << std::endl;
+    std::cin >> message;
+  }
+  card::MoneyType amount;
+  int target_account;
+  switch (option) {
+    case 1:
+      std::cin >> amount;
+      cardCore->Deposit(amount, *selected, card::DEPOSIT_CARD);
+      break;
+
+    case 2:
+      std::cin >> amount;
+      cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD);
+      break;
+    case 3:
+      std::cin >> amount;
+      std::cin >> target_account;
+      cardCore->ExternalTransfer(amount, selected,
+                                 cardCore->FindCard(target_account));
+      break;
+    case 0:
+      return;
+  }
 }
 
 void Interface::StatusBar() const {
   std::cout << "欢迎使用校园卡管理系统--version 0.1.0" << std::endl;
+  std::cout << "当前选择账户: ";
+  if (selected == NULL)
+    std::cout << "当前无选择账户" << std::endl;
+  else
+    std::cout << selected->GetIdentifier() << " " << selected->GetName()
+              << std::endl;
+  std::cout << "===========================================" << std::endl;
 }
 
 void Interface::LookUp() {
   foundedList.clear();
-  std::cout << "请输入查询/修改用户名或标识符" << std::endl;
+  std::cout << "请输入查询/选择用户名或标识符" << std::endl;
   std::string message;
   int _identifier;
   // getline(std::cin, message);
@@ -152,7 +244,10 @@ void Interface::LookUp() {
 
   if (general::str2num(message, _identifier)) {
     holder = cardCore->FindCard(_identifier);
-    if (holder != NULL) foundedList.push_back(holder);
+    if (holder != NULL)
+      foundedList.push_back(holder);
+    else
+      std::cout << "未找到用户，请确认输入" << std::endl;
     return;
   }
   foundedList = cardCore->FindCard(message);
@@ -174,55 +269,71 @@ void Interface::Add() {
   }
   int identifier;
   std::string name;
-  std::string passwd;
-  std::string department;
-  std::string studentId;
-  std::string cardCode;
-  card::MoneyType balance;
-  card::MoneyType overdraft;
-  card::Campus_Card campusCard{};
-  card::Deposit_Card depositCard{};
-  card::Binding_Card bindingCard{};
   ui::ReadInIdentifier(std::cin, identifier);
   ui::ReadInName(std::cin, name);
-  ui::ReadInPasswd(std::cin, passwd);
+
+  if (option == 1 || option == 3) {
+    AddDepositCard(identifier, name);
+  }
 
   if (option == 2 || option == 3) {
-    std::cout << "Campus_Card" << std::endl;
-    ui::ReadInStudentId(std::cin, studentId);
-    ui::ReadInDepartment(std::cin, department);
-    ui::ReadInBalance(std::cin, balance);
-    campusCard.SetIdentifier(identifier);
-    campusCard.SetName(name);
-    campusCard.SetPasswd(passwd);
-    campusCard.SetStudentId(studentId);
-    campusCard.SetDepartment(department);
-    campusCard.SetBalance(balance);
-    cardCore->AddCampusCard(campusCard);
-    logCore->NewCard(campusCard);
+    AddCampusCard(identifier, name);
   }
-  if (option == 1 || option == 3) {
-    std::cout << "Deposit_Card" << std::endl;
-    ui::ReadInCardCode(std::cin, cardCode);
-    ui::ReadInOverdraft(std::cin, overdraft);
-    ui::ReadInBalance(std::cin, balance);
-    depositCard.SetIdentifier(identifier);
-    depositCard.SetName(name);
-    depositCard.SetPasswd(passwd);
-    depositCard.SetCardCode(cardCode);
-    depositCard.SetBalance(balance);
-    depositCard.SetOverdraft(overdraft);
-    cardCore->AddDepositCard(depositCard);
-    logCore->NewCard(depositCard);
-  }
+
   if (option == 3) {
-    cardCore->BindingCard(campusCard, depositCard);
+    cardCore->BindingCard(identifier);
   }
 }
 
+void Interface::AddCampusCard(int identifier, std::string name) {
+  std::string passwd;
+  std::string department;
+  std::string studentId;
+  card::MoneyType balance;
+  card::Campus_Card campusCard{};
+
+  std::cout << "Campus_Card" << std::endl;
+  ui::ReadInStudentId(std::cin, studentId);
+  ui::ReadInDepartment(std::cin, department);
+  ui::ReadInPasswd(std::cin, passwd);
+  ui::ReadInBalance(std::cin, balance);
+
+  campusCard.SetIdentifier(identifier);
+  campusCard.SetName(name);
+  campusCard.SetPasswd(passwd);
+  campusCard.SetStudentId(studentId);
+  campusCard.SetDepartment(department);
+  campusCard.SetBalance(balance);
+  cardCore->AddCampusCard(campusCard);
+  logCore->NewCard(campusCard);
+}
+
+void Interface::AddDepositCard(int identifier, std::string name) {
+  std::string passwd;
+  std::string cardCode;
+  card::MoneyType balance;
+  card::MoneyType overdraft;
+  card::Deposit_Card depositCard{};
+
+  std::cout << "Deposit_Card" << std::endl;
+  ui::ReadInCardCode(std::cin, cardCode);
+  ui::ReadInOverdraft(std::cin, overdraft);
+  ui::ReadInBalance(std::cin, balance);
+
+  depositCard.SetIdentifier(identifier);
+  depositCard.SetName(name);
+  depositCard.SetPasswd(passwd);
+  depositCard.SetCardCode(cardCode);
+  depositCard.SetBalance(balance);
+  depositCard.SetOverdraft(overdraft);
+  cardCore->AddDepositCard(depositCard);
+  logCore->NewCard(depositCard);
+}
+
 bool Interface::ChooseAccount() {
+  std::cout << "请选择账户" << std::endl;
   std::cout << "[1] 显示全部账户" << std::endl;
-  std::cout << "[2] 选择修改账户" << std::endl;
+  std::cout << "[2] 选择账户" << std::endl;
   std::cout << "[0] 返回上级菜单" << std::endl;
   int option;
   std::string message;
@@ -235,9 +346,11 @@ bool Interface::ChooseAccount() {
   if (option == 1) {
     cardCore->PrintAll();
   }
-  LookUp();
-  selected = (foundedList.empty()) ? NULL : *(foundedList.begin());
-  return true;
+  if (option == 2) {
+    LookUp();
+    selected = (foundedList.empty()) ? NULL : *(foundedList.begin());
+  }
+    return true;
 }
 void Interface::Modify() {
   bool exitFlag = false;
@@ -245,7 +358,8 @@ void Interface::Modify() {
     if (!ChooseAccount()) return;
   }
   while (!exitFlag) {
-    std::cout << selected->GetInfo() << std::endl;
+    system("reset");
+    StatusBar();
     std::cout << "请选择需要修改的卡片类型" << std::endl;
     std::cout << "[1] 修改基本信息" << std::endl;
     std::cout << "[2] 修改校园卡信息" << std::endl;
@@ -284,7 +398,7 @@ void Interface::ModifyBasic() {
   bool exitFlag = false;
   while (!exitFlag) {
     system("reset");
-    std::cout << selected->GetInfo() << std::endl;
+    StatusBar();
     Print(std::vector<card::Binding_Card*>{selected});
     std::cout << "请选择需要修改的信息" << std::endl;
     std::cout << "[1] 修改姓名" << std::endl;
@@ -319,14 +433,15 @@ void Interface::ModifyBasic() {
 }
 
 void Interface::ModifyCampus() {
-  if (!selected->IsCampusCard())
-  {
-    std::cout<<"Campus Card Not Exist"<<std::endl;
+  if (!selected->IsCampusCard()) {
+    std::cout << "不存在" << std::endl;
+    general::Pause();
+    return;
   }
   bool exitFlag = false;
   while (!exitFlag) {
     system("reset");
-    std::cout << selected->Campus_Card::GetInfo() << std::endl;
+    StatusBar();
     Print(std::vector<card::Binding_Card*>{selected});
     std::cout << "请选择需要修改的信息" << std::endl;
     std::cout << "[1] 修改学号" << std::endl;
@@ -363,10 +478,15 @@ void Interface::ModifyCampus() {
   }
 }
 void Interface::ModifyDeposit() {
+  if (!selected->IsDepositCard()) {
+    std::cout << "不存在" << std::endl;
+    general::Pause();
+    return;
+  }
   bool exitFlag = false;
   while (!exitFlag) {
     system("reset");
-    std::cout << selected->Deposit_Card::GetInfo() << std::endl;
+    StatusBar();
     Print(std::vector<card::Binding_Card*>{selected});
     std::cout << "请选择需要修改的信息" << std::endl;
     std::cout << "[1] 修改卡号" << std::endl;
@@ -408,7 +528,8 @@ void Interface::Delete() {
     if (!ChooseAccount()) return;
   }
   while (!exitFlag) {
-    std::cout << selected->GetInfo() << std::endl;
+    system("reset");
+    StatusBar();
     std::cout << "请选择需要删除的卡片类型" << std::endl;
     std::cout << "[1] 删除该账户" << std::endl;
     std::cout << "[2] 删除校园卡信息" << std::endl;
@@ -429,6 +550,7 @@ void Interface::Delete() {
         temp = *cardCore->FindCard(selected->GetIdentifier());
         logCore->DeleteCard(temp);
         cardCore->DeleteCard(selected->GetIdentifier());
+        selected = NULL;
         exitFlag = true;
         break;
       }
@@ -454,6 +576,12 @@ void Interface::Delete() {
         std::cout << "无效输入" << std::endl;
     }
   }
+  if (!selected->IsCampusCard() && !selected->IsDepositCard()) {
+    card::Deposit_Card temp = *cardCore->FindCard(selected->GetIdentifier());
+    logCore->DeleteCard(temp);
+    cardCore->DeleteDepositCard(selected->GetIdentifier());
+    std::cout << "名下无任何信息，删除账户" << std::endl;
+  }
   return;
 }
 void Interface::Print(std::vector<card::Binding_Card*> list) {
@@ -470,7 +598,8 @@ void Interface::Print(std::vector<card::Binding_Card*> list) {
 }
 bool ReadInIdentifier(std::istream& in, int& num) {
   if (in.rdbuf() == std::cin.rdbuf())
-    std::cout << std::endl << "请输入您的身份识别号[ID]:\t";
+    std::cout << std::endl
+              << "请输入您的身份识别号[ID] 小于" << INT_MAX << ":\t";
   std::string message;
   in >> message;
   while (!general::str2num(message, num)) {
