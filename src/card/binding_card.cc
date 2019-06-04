@@ -1,23 +1,36 @@
 #include "binding_card.h"
 
 namespace card {
-Binding_Card::Binding_Card() : campusExist{false}, depositExist{false} {}
+Binding_Card::Binding_Card()
+    : campusExist{false}, depositExist{false}, Card_Base{-1, ""} {}
 Binding_Card::Binding_Card(const Campus_Card &campusCard)
     : Campus_Card{campusCard},
       Deposit_Card{},
+      Card_Base{-1, ""},
       campusExist{true},
-      depositExist{false} {}
+      depositExist{false} {
+  SetIdentifier(campusCard.GetIdentifier());
+  SetName(campusCard.GetName());
+}
 Binding_Card::Binding_Card(const Deposit_Card &depositCard)
     : Campus_Card{},
       Deposit_Card{depositCard},
+      Card_Base{-1, ""},
       campusExist{false},
-      depositExist{true} {}
+      depositExist{true} {
+  SetIdentifier(depositCard.GetIdentifier());
+  SetName(depositCard.GetName());
+}
 Binding_Card::Binding_Card(const Campus_Card &campusCard,
                            const Deposit_Card &depositCard)
     : Campus_Card{campusCard},
       Deposit_Card{depositCard},
+      Card_Base{-1, ""},
       campusExist{true},
-      depositExist{true} {}
+      depositExist{true} {
+  SetIdentifier(depositCard.GetIdentifier());
+  SetName(depositCard.GetName());
+}
 // accessor
 int Binding_Card::GetIdentifier() const { return Campus_Card::GetIdentifier(); }
 std::string Binding_Card::GetInfo() const {
@@ -31,7 +44,6 @@ std::string Binding_Card::GetInfo() const {
   res += IsBinding() ? "\nBINDED" : "\nNOT BINDED";
   return res;
 }
-
 
 bool Binding_Card::IsCampusCard() const { return campusExist; }
 bool Binding_Card::IsDepositCard() const { return depositExist; }

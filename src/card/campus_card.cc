@@ -4,7 +4,8 @@ namespace card {
 Campus_Card::Campus_Card(int _identifier, std::string _userName,
                          std::string _passwd, std::string _studentId,
                          std::string _department, MoneyType _balance)
-    : Card{_identifier, _userName, _passwd, _balance} {
+    : Card_Base{_identifier, _userName},
+      Card{_identifier, _userName, _passwd, _balance} {
   this->studentId = _studentId;
   this->department = _department;
 }
