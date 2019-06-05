@@ -680,8 +680,6 @@ void Interface::Delete() {
       case 1: {
         card::Campus_Card temp = *cardCore->FindCard(selected->GetIdentifier());
         logCore->DeleteCard(temp);
-        temp = *cardCore->FindCard(selected->GetIdentifier());
-        logCore->DeleteCard(temp);
         cardCore->DeleteCard(selected->GetIdentifier());
         selected = NULL;
         exitFlag = true;
@@ -709,7 +707,8 @@ void Interface::Delete() {
         std::cout << "无效输入" << std::endl;
     }
   }
-  if (!selected->IsCampusCard() && !selected->IsDepositCard()) {
+  if (selected != NULL && !selected->IsCampusCard() &&
+      !selected->IsDepositCard()) {
     card::Deposit_Card temp = *cardCore->FindCard(selected->GetIdentifier());
     logCore->DeleteCard(temp);
     cardCore->DeleteDepositCard(selected->GetIdentifier());
