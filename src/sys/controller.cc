@@ -12,7 +12,16 @@ card_storage* card_storage::init() {
   if (butler == NULL) butler = new card_storage;
   return butler;
 }
-
+card_storage::~card_storage() {
+  std::map<int, card::Binding_Card*>::iterator it = storage.begin();
+  while (it != storage.end()) {
+    card::Binding_Card* temp = it->second;
+    it->second = NULL;
+    delete temp;
+    it++;
+  }
+  storage.clear();
+}
 // accessor
 #ifdef DEBUG_
 void card_storage::print() {
@@ -99,7 +108,7 @@ bool card_storage::BindingCard(int _identifier) {
 */
 card::Binding_Card* card_storage::FindCard(int _identifier) {
   std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
-  if (it==storage.end()) return NULL;
+  if (it == storage.end()) return NULL;
   return storage.find(_identifier)->second;
 }
 std::vector<card::Binding_Card*> card_storage::FindCard(std::string _name) {

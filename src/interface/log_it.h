@@ -6,14 +6,14 @@
 #include "../card/card.h"
 #include "../card/deposit_card.h"
 namespace logit {
-const std::string DEFAULT_ROOT_ADDR="./Logs";
+const std::string DEFAULT_ROOT_ADDR = "./Logs";
 
 class LogIt {
  private:
   std::string logFile;
-  std::ofstream log;
+  std::fstream log;
   std::string rootAddr;
-  LogIt(std::string rootAddr=DEFAULT_ROOT_ADDR);
+  LogIt(std::string rootAddr = DEFAULT_ROOT_ADDR);
   static LogIt* logCore;
 
  public:
@@ -29,11 +29,11 @@ class LogIt {
     READ_DATABASE,
     WRITE_IN_DATABASE
   };
-  static LogIt* Init(std::string rootAddr=DEFAULT_ROOT_ADDR);
+  static LogIt* Init(std::string rootAddr = DEFAULT_ROOT_ADDR);
   ~LogIt();
   void PrintTime();
   bool IsSuccess() const;
-  bool OpenTest(std::ofstream& out, std::string addr,
+  bool OpenTest(std::fstream& out, std::string addr,
                 std::ios_base::openmode mode = std::ios_base::app);
   bool NewCard(const card::Card& current);
   bool DeleteCard(const card::Card& current);
@@ -41,6 +41,7 @@ class LogIt {
                     card::MoneyType amount = 0);
   bool ExternalAccount(const card::Card& src, const card::Card& dest,
                        std::string operation, card::MoneyType amount);
+  bool GetUserLog(const card::Card& src, card::CardType cardType=card:: CAMPUS_CARD);
 };
 }  // namespace logit
 #endif

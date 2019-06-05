@@ -13,7 +13,7 @@ Deposit_Card::~Deposit_Card() { overdraft = -1; }
 // accessor
 MoneyType Deposit_Card::GetOverdraft() const { return overdraft; }
 std::string Deposit_Card::GetCardCode() const { return cardCode; }
-std::string Deposit_Card::GetCardType() const { return "Deposit Card"; }
+std::string Deposit_Card::GetCardType() const { return "Deposit_Card"; }
 std::string Deposit_Card::GetInfo() const {
   std::string InfoStr = "";
   InfoStr += "\nCard Type:\t" + GetCardType();

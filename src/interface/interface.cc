@@ -12,10 +12,17 @@ Interface* Interface::InitInterface(cardSystem::card_storage* _cardCore,
   if (userInterface == NULL) userInterface = new Interface{_cardCore, _logCore};
   return userInterface;
 }
-
+Interface::~Interface() {
+  foundedList.clear();
+  logCore = NULL;
+  selected = NULL;
+}
 int Interface::GetOpt() const { return opt; }
 
-bool Interface::SetOpt(int _opt) { opt = _opt; }
+bool Interface::SetOpt(int _opt) {
+  opt = _opt;
+  return true;
+}
 
 bool Interface::Dispatch() {
   bool exitFlag = false;
@@ -41,6 +48,7 @@ bool Interface::Dispatch() {
     if (exitFlag) break;
     SetOpt(Guard(runMenu));
   }
+  return true;
 }
 
 Interface::Menus Interface::Guard(MenuType& currentMenu) {
@@ -172,6 +180,7 @@ void Interface::CampusAccount() {
   std::cout << "[1]\t 存款" << std::endl;
   std::cout << "[2]\t 取款" << std::endl;
   std::cout << "[3]\t 绑定账户转入" << std::endl;
+  std::cout << "[4]\t 查询记录" << std::endl;
   std::cout << "[0]\t 返回上级菜单" << std::endl;
   std::string message;
   std::cin >> message;
@@ -229,6 +238,12 @@ void Interface::CampusAccount() {
                               amount);
       }
       break;
+    case 4:
+      if (!logCore->GetUserLog(card::Campus_Card{*selected}, card::CAMPUS_CARD))
+        std::cout << "无日志" << std::endl;
+      else
+        general::Pause();
+      break;
     case 0:
       return;
   }
@@ -244,6 +259,7 @@ void Interface::DepositAccount() {
   std::cout << "[1]\t 存款" << std::endl;
   std::cout << "[2]\t 取款" << std::endl;
   std::cout << "[3]\t 转账" << std::endl;
+  std::cout << "[4]\t 查询记录" << std::endl;
   std::cout << "[0]\t 返回上级菜单" << std::endl;
   std::string message;
   std::cin >> message;
@@ -278,9 +294,10 @@ void Interface::DepositAccount() {
         std::cout << "输入有误,请重试" << std::endl;
         std::cin >> message;
       }
-      if (!cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD))
-{        std::cout << "操作失败" << std::endl;general::Pause();}
-      else {
+      if (!cardCore->Withdraw(amount, *selected, card::DEPOSIT_CARD)) {
+        std::cout << "操作失败" << std::endl;
+        general::Pause();
+      } else {
         std::cout << "操作成功" << std::endl;
         logCore->InnerAccount(card::Deposit_Card{*selected}, "取款", amount);
       }
@@ -316,6 +333,13 @@ void Interface::DepositAccount() {
             card::Deposit_Card{*(cardCore->FindCard(target_account))},
             card::Deposit_Card{*selected}, "收入", amount);
       }
+      break;
+    case 4:
+      if (!logCore->GetUserLog(card::Deposit_Card{*selected},
+                               card::DEPOSIT_CARD))
+        std::cout << "无日志" << std::endl;
+      else
+        general::Pause();
       break;
     case 0:
       return;

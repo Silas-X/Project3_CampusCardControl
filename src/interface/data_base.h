@@ -23,6 +23,7 @@ class Data_Base {
             std::string _rootAddr = DEFAULT_ROOT_INDEX);
 
  public:
+  ~Data_Base();
   static Data_Base* Init(cardSystem::card_storage* _cardCore,
                          logit::LogIt* _logCore,
                          std::string rootAddr = DEFAULT_ROOT_INDEX);

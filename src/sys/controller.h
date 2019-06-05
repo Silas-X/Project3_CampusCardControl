@@ -32,7 +32,7 @@ class card_storage {
 
  public:
   static card_storage* init();  // singletons
-
+  ~card_storage();
 // accesor
 #ifdef DEBUG_
   void print();
@@ -62,7 +62,7 @@ class card_storage {
 
   // bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
 
-  card::Binding_Card* FindCard(int _identifier) ;
+  card::Binding_Card* FindCard(int _identifier);
   std::vector<card::Binding_Card*> FindCard(std::string _name);
   // Account operations
   bool Deposit(card::MoneyType amount, card::Binding_Card& current,

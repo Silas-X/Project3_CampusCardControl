@@ -17,6 +17,11 @@ Data_Base* Data_Base::Init(cardSystem::card_storage* _cardCore,
     fileCore = new Data_Base{_cardCore, _logCore, _rootAddr};
   return fileCore;
 }
+
+Data_Base::~Data_Base() {
+  cardCore = NULL;
+  logCore = NULL;
+}
 std::string Data_Base::GetRootAddr() const { return rootAddr; }
 void Data_Base::SetRootAddr(std::string addr) { rootAddr = addr; }
 
@@ -25,6 +30,7 @@ bool Data_Base::WriteOutData() {
   system(command.c_str());
   WriteOutIndex(rootAddr);
   WriteOutAllUserInfo();
+  return true;
 }
 
 bool Data_Base::WriteOutIndex(std::string rootAddr) {
@@ -39,6 +45,7 @@ bool Data_Base::WriteOutIndex(std::string rootAddr) {
     it++;
   }
   out.close();
+  return true;
 }
 
 bool Data_Base::WriteOutAllUserInfo() {

@@ -15,7 +15,7 @@ Campus_Card::~Campus_Card() {
   this->department = -1;
 }
 // accessor
-std::string Campus_Card::GetCardType() const { return "Campus Card"; }
+std::string Campus_Card::GetCardType() const { return "Campus_Card"; }
 std::string Campus_Card::GetStudentId() const { return studentId; }
 std::string Campus_Card::GetDepartment() const { return department; }
 std::string Campus_Card::GetInfo() const {
