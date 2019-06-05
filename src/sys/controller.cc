@@ -64,7 +64,23 @@ std::vector<std::string> card_storage::GetAllIdentifier() {
   return identifierList;
 }
 // mutator
-
+bool card_storage::DeleteCard(int _identifier) {
+  card::Binding_Card* temp = FindCard(_identifier);
+  if (temp == NULL) return false;
+  delete temp;
+  storage.erase(_identifier);
+  return true;
+}
+bool card_storage::DeleteCampusCard(int _identifier) {
+  std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+  if (it == storage.end()) return false;
+  return it->second->SetCampusStatus(false);
+}
+bool card_storage::DeleteDepositCard(int _identifier) {
+  std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+  if (it == storage.end()) return false;
+  return it->second->SetDepositStatus(false);
+}
 bool card_storage::AddCampusCard(card::Campus_Card& campusCard) {
   // TODO::为binding card提供三种模式的构造器
   // TODO::为binding card 提供添加其内部两种卡片的函数

@@ -40,21 +40,9 @@ class card_storage {
   void PrintAll(std::string ctrl = "OneLine");
   std::vector<std::string> GetAllIdentifier();
   // mutator
-  bool DeleteCard(int _identifier) {
-    card::Binding_Card* temp = FindCard(_identifier);
-    delete temp;
-    storage.erase(_identifier);
-  }
-  bool DeleteCampusCard(int _identifier) {
-    std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
-    if (it == storage.end()) return false;
-    return it->second->SetCampusStatus(false);
-  }
-  bool DeleteDepositCard(int _identifier) {
-    std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
-    if (it == storage.end()) return false;
-    return it->second->SetDepositStatus(false);
-  }
+  bool DeleteCard(int _identifier);
+  bool DeleteCampusCard(int _identifier);
+  bool DeleteDepositCard(int _identifier);
   bool AddCampusCard(card::Campus_Card& compusCard);
   bool AddDepositCard(card::Deposit_Card& compusCard);
 
