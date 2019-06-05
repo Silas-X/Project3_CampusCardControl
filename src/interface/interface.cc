@@ -775,23 +775,27 @@ bool ReadInOverdraft(std::istream& in, card::MoneyType& num) {
     std::cout << "输入有误,请重试" << std::endl;
     in >> message;
   }
+  return true;
 }
 
 bool ReadInCardCode(std::istream& in, std::string& message) {
   if (in.rdbuf() == std::cin.rdbuf())
     std::cout << std::endl << "请输入卡号:\t ";
   in >> message;
+  return true;
 }
 
 bool ReadInStudentId(std::istream& in, std::string& message) {
   if (in.rdbuf() == std::cin.rdbuf())
     std::cout << std::endl << "请输入学号或教工号:\t ";
   in >> message;
+  return true;
 }
 
 bool ReadInDepartment(std::istream& in, std::string& message) {
   if (in.rdbuf() == std::cin.rdbuf())
     std::cout << std::endl << "请输入所属学院:\t ";
   in >> message;
+  return true;
 }
 }  // namespace ui

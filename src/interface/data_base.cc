@@ -88,6 +88,7 @@ bool Data_Base::WriteOutUserInfo(std::string _userAddr,
   out.open(temp, std::fstream::out);
   out << current->IsBinding() << std::endl;
   out.close();
+  return true;
 }
 bool Data_Base::ReadInAllData() {
   if (!ReadInIndex()) return false;
@@ -96,6 +97,7 @@ bool Data_Base::ReadInAllData() {
     ReadInUserData(*it);
     it++;
   }
+  return true;
 }
 bool Data_Base::ReadInIndex() {
   std::ifstream in;
@@ -187,6 +189,7 @@ bool Data_Base::ReadInUserData(std::string _userAddr) {
   in >> isBinded;
   if (isBinded) cardCore->BindingCard(identifier);
   in.close();
+  return true;
 }
 
 }  // namespace fileSystem
