@@ -24,8 +24,21 @@ void Pause() {
     if (str == "X" || str == "x") break;
   }
 }
-void mkdir(std::string addr) {
-  std::string command = "mkdir " + addr;
+void mkdir(std::string addr, std::string rootAddr) {
+  std::string command = "mkdir ";
+  if (rootAddr != "") {
+    command += rootAddr;
+    command += "/" + addr;
+  } else
+    command = "mkdir " + addr;
   system(command.c_str());
+}
+
+std::string FormAddr(std::string rootAddr, std::string dir,
+                     std::string fileName) {
+  std::string str = "./" + rootAddr;
+  if (dir != "") str += "/" + dir;
+  if (fileName != "") str += "/" + fileName;
+  return str;
 }
 }  // namespace general

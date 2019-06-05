@@ -12,7 +12,16 @@ card_storage* card_storage::init() {
   if (butler == NULL) butler = new card_storage;
   return butler;
 }
-
+card_storage::~card_storage() {
+  std::map<int, card::Binding_Card*>::iterator it = storage.begin();
+  while (it != storage.end()) {
+    card::Binding_Card* temp = it->second;
+    it->second = NULL;
+    delete temp;
+    it++;
+  }
+  storage.clear();
+}
 // accessor
 #ifdef DEBUG_
 void card_storage::print() {
@@ -84,15 +93,22 @@ bool card_storage::AddDepositCard(card::Deposit_Card& depositCard) {
   return true;
 }
 
-bool card_storage::BindingCard(card::Campus_Card& card1,
+bool card_storage::BindingCard(int _identifier) {
+  card::Binding_Card* bindingCard = FindCard(_identifier);
+  return bindingCard->SetBindingCards();
+}
+
+/* bool card_storage::BindingCard(card::Campus_Card& card1,
                                card::Deposit_Card& card2) {
   if (card1.GetIdentifier() != card2.GetIdentifier()) return false;
   AddCampusCard(card1);
   AddDepositCard(card2);
   return FindCard(card1.GetIdentifier())->SetBindingCards();
 }
-
-card::Binding_Card* card_storage::FindCard(int _identifier) const {
+*/
+card::Binding_Card* card_storage::FindCard(int _identifier) {
+  std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
+  if (it == storage.end()) return NULL;
   return storage.find(_identifier)->second;
 }
 std::vector<card::Binding_Card*> card_storage::FindCard(std::string _name) {
@@ -105,17 +121,17 @@ std::vector<card::Binding_Card*> card_storage::FindCard(std::string _name) {
   return list;
 }
 // Account operations
-bool card_storage::Deposit(card::MoneyType amount, card::Binding_Card current,
+bool card_storage::Deposit(card::MoneyType amount, card::Binding_Card& current,
                            card::CardType cardType) {
   if (amount < 0) return false;
   return current.Deposit(amount, cardType);
 }
-bool card_storage::Withdraw(card::MoneyType amount, card::Binding_Card current,
+bool card_storage::Withdraw(card::MoneyType amount, card::Binding_Card& current,
                             card::CardType cardType) {
   if (amount < 0) return false;
   return current.Withdraw(amount, cardType);
 }
-bool card_storage::Pay(card::MoneyType amount, card::Binding_Card current,
+bool card_storage::Pay(card::MoneyType amount, card::Binding_Card& current,
                        card::CardType cardType) {
   if (amount < 0) return false;
   return current.Pay(amount, cardType);
@@ -128,6 +144,7 @@ bool card_storage::ExternalTransfer(card::MoneyType amount,
                                     card::CardType destType) {
   if (amount < 0) return false;
   if (src == dest) return false;
+  if (src == NULL || dest == NULL) return false;
   if (!src->Withdraw(amount, srcType)) return false;
   if (!dest->Deposit(amount, destType)) {
     src->Deposit(amount, srcType);

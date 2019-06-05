@@ -9,7 +9,7 @@
 #include "log_it.h"
 
 namespace fileSystem {
-const std::string DEFAULT_ROOT_INDEX = "./DataFiles/";
+const std::string DEFAULT_ROOT_INDEX = "./DataFiles";
 class Data_Base {
  private:
   std::ifstream inputFile;
@@ -23,6 +23,7 @@ class Data_Base {
             std::string _rootAddr = DEFAULT_ROOT_INDEX);
 
  public:
+  ~Data_Base();
   static Data_Base* Init(cardSystem::card_storage* _cardCore,
                          logit::LogIt* _logCore,
                          std::string rootAddr = DEFAULT_ROOT_INDEX);
@@ -32,8 +33,9 @@ class Data_Base {
   bool WriteOutIndex(std::string rootAddr);
   bool WriteOutUserInfo(std::string userAddr, card::Binding_Card* current);
   bool WriteOutAllUserInfo();
+  bool ReadInAllData();
   bool ReadInIndex();
-  bool ReadInUserInfo();
+  bool ReadInUserData(std::string _userAdd);
 };
 }  // namespace fileSystem
 

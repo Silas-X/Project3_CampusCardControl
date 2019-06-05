@@ -32,7 +32,7 @@ class card_storage {
 
  public:
   static card_storage* init();  // singletons
-
+  ~card_storage();
 // accesor
 #ifdef DEBUG_
   void print();
@@ -40,7 +40,11 @@ class card_storage {
   void PrintAll(std::string ctrl = "OneLine");
   std::vector<std::string> GetAllIdentifier();
   // mutator
-  bool DeleteCard(int _identifier) { storage.erase(_identifier); }
+  bool DeleteCard(int _identifier) {
+    card::Binding_Card* temp = FindCard(_identifier);
+    delete temp;
+    storage.erase(_identifier);
+  }
   bool DeleteCampusCard(int _identifier) {
     std::map<int, card::Binding_Card*>::iterator it = storage.find(_identifier);
     if (it == storage.end()) return false;
@@ -54,16 +58,18 @@ class card_storage {
   bool AddCampusCard(card::Campus_Card& compusCard);
   bool AddDepositCard(card::Deposit_Card& compusCard);
 
-  bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
+  bool BindingCard(int identifier);
 
-  card::Binding_Card* FindCard(int _identifier) const;
+  // bool BindingCard(card::Campus_Card& card1, card::Deposit_Card& card2);
+
+  card::Binding_Card* FindCard(int _identifier);
   std::vector<card::Binding_Card*> FindCard(std::string _name);
   // Account operations
-  bool Deposit(card::MoneyType amount, card::Binding_Card current,
+  bool Deposit(card::MoneyType amount, card::Binding_Card& current,
                card::CardType cardType = card::DEPOSIT_CARD);
-  bool Withdraw(card::MoneyType amount, card::Binding_Card current,
+  bool Withdraw(card::MoneyType amount, card::Binding_Card& current,
                 card::CardType cardType = card::DEPOSIT_CARD);
-  bool Pay(card::MoneyType amount, card::Binding_Card current,
+  bool Pay(card::MoneyType amount, card::Binding_Card& current,
            card::CardType cardType = card::DEPOSIT_CARD);
   bool ExternalTransfer(card::MoneyType amount, card::Binding_Card* src,
                         card::Binding_Card* dest,
