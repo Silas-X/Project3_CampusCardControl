@@ -1,3 +1,8 @@
+/*提供储蓄卡类和方法
+ *
+ * 
+ */
+
 #include "deposit_card.h"
 namespace card {
 

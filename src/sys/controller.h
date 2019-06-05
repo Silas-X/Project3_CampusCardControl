@@ -52,7 +52,7 @@ class card_storage {
 
   card::Binding_Card* FindCard(int _identifier);
   std::vector<card::Binding_Card*> FindCard(std::string _name);
-  // Account operations
+  // Account operations 内部调用对应卡片接口进行操作
   bool Deposit(card::MoneyType amount, card::Binding_Card& current,
                card::CardType cardType = card::DEPOSIT_CARD);
   bool Withdraw(card::MoneyType amount, card::Binding_Card& current,

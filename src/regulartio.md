@@ -1,2 +1,0 @@
-#Naming Rules
-File Names : 

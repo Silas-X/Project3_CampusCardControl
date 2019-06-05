@@ -1,3 +1,5 @@
+/*该头文件提供记录日志的方法
+ */
 #ifndef LOG_IT_H_
 #define LOG_IT_H_
 #include <fstream>
@@ -35,13 +37,17 @@ class LogIt {
   bool IsSuccess() const;
   bool OpenTest(std::fstream& out, std::string addr,
                 std::ios_base::openmode mode = std::ios_base::app);
-  bool NewCard(const card::Card& current);
-  bool DeleteCard(const card::Card& current);
-  bool InnerAccount(const card::Card& current, std::string operation,
-                    card::MoneyType amount = 0);
-  bool ExternalAccount(const card::Card& src, const card::Card& dest,
-                       std::string operation, card::MoneyType amount);
-  bool GetUserLog(const card::Card& src, card::CardType cardType=card:: CAMPUS_CARD);
+  bool NewCard(const card::Card& current);     //写出创建卡片记录
+  bool DeleteCard(const card::Card& current);  //写出删除卡片记录
+  bool InnerAccount(
+      const card::Card& current, std::string operation,
+      card::MoneyType amount = 0);  //写出单账户自身操作，即不涉及其他账户信息
+  bool ExternalAccount(
+      const card::Card& src, const card::Card& dest, std::string operation,
+      card::MoneyType amount);  //写出多用户操作，即转账等设计多用户操作
+  bool GetUserLog(
+      const card::Card& src,
+      card::CardType cardType = card::CAMPUS_CARD);  //读入用户账户交易记录
 };
 }  // namespace logit
 #endif

@@ -1,3 +1,7 @@
+/*提供程序通用函数
+ *
+ * 
+ */
 #include "generalFun.h"
 #include <ctime>
 #include <iostream>

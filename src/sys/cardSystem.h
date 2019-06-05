@@ -1,3 +1,10 @@
+/*提供整个程序的运行系统
+ * card_storage *storageCore;
+ * ui::Interface *interfaceCore;
+ * logit::LogIt *logCore;
+ * fileSystem::Data_Base *fileCore;
+ * 四个核心分别执行不同的操作，并且通过指针的方式嵌套核心以便于重用
+ */
 #ifndef CARDSYSTEM_H_
 #define CARDSYSTEM_H_
 #define DEBUG_
@@ -34,7 +41,7 @@ class CardSystem {
  public:
   CardSystem();
   ~CardSystem();
-  bool Launcher();
+  bool Launcher();//执行程序
 };
 }  // namespace cardSystem
 

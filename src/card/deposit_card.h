@@ -1,3 +1,7 @@
+/*提供储蓄卡类和方法
+ *
+ * 
+ */
 #ifndef DEPOSIT_CARD_H_
 #define DEPOSIT_CARD_H_
 #include "card.h"
@@ -23,10 +27,10 @@ class Deposit_Card : public Card {
   std::string GetInfo() const;
 
   // mutator
-  void Copy(const Deposit_Card &origin);
+  void Copy(const Deposit_Card &origin);//复制卡片信息
 
-  bool SetOverdraft(MoneyType amount);
-  bool SetCardCode(std::string code);
+  bool SetOverdraft(MoneyType amount);//设置透支信息
+  bool SetCardCode(std::string code);//设置卡号
 
   bool Deposit(MoneyType amount);
   bool Withdraw(MoneyType amount);

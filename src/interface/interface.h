@@ -1,3 +1,7 @@
+/*该头文件提供与用户交互的界面
+ *通过调用cardCore的方法执行具体任务
+ *调用logCore方法执行记录任务
+ */
 #ifndef INTERFACE_H_
 #define INTERFACE_H_
 #include <iostream>
@@ -25,8 +29,6 @@ class Interface {
   std::vector<card::Binding_Card*> foundedList;
   logit::LogIt* logCore;
   card::Binding_Card* selected;
-  // std::vector<std::map<int, card::Binding_Card*>::iterator> foundedList;
-  // std::map<int, card::Binding_Card*>::iterator selected;
   struct MenuType {
     void (Interface::*MenuInfo)();
     Menus (Interface::*MenuAction)(std::string message);
@@ -47,7 +49,9 @@ class Interface {
   // mutator
   bool SetOpt(int _opt);
 
-  Menus Guard(MenuType& currentMenu);
+  Menus Guard(MenuType& currentMenu);  //用于接收Exit指令和保护菜单程序
+  
+  //菜单，Info为打印菜单信息，对应Menus返回值函数为执行具体菜单任务
   void MainMenuInfo();  // MAIN_MENU
   Menus MainMenu(std::string message);
   void HolderMenuInfo();  // HOLDER_MENU
@@ -56,24 +60,27 @@ class Interface {
   Menus AccountMainMenu(std::string message);
   void CampusAccount();
   void DepositAccount();
-  void StatusBar() const;
 
-  // API
-  void LookUp();
-  void Add();
-  void AddCampusCard(int identifier, std::string name);
-  void AddDepositCard(int identifier, std::string name);
+  void StatusBar() const;//打印状态栏信息和当前选择账户信息
 
-  bool ChooseAccount();
+  void LookUp();  //搜索用户信息
+  //增加操作
+  void Add();                                            //添加用户记录
+  void AddCampusCard(int identifier, std::string name);  //添加校园卡记录
+  void AddDepositCard(int identifier, std::string name);  //添加储蓄卡记录
+
+  bool ChooseAccount();  //选择账户以进行账户操作
+  //修改操作
   void Modify();
   void ModifyBasic();
   void ModifyCampus();
   void ModifyDeposit();
+
   void Delete();
   void Print(std::vector<card::Binding_Card*> list);
-
-  // account operation
 };
+
+//读入用户相关信息
 bool ReadInIdentifier(std::istream& in, int& num);
 bool ReadInName(std::istream& in, std::string& str);
 bool ReadInPasswd(std::istream& in, std::string& str);
